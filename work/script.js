@@ -52,7 +52,7 @@ function arcReCaculate() {
         ballDia.value = (arcRadius.value / 1.11 * 2).toFixed(3);
         touchAng.value = (Math.asin(horiOffset.value / (arcRadius.value - ballDia.value / 2)) * (180 / Math.PI)).toFixed(3);
 
-        if (isNaN(touchAng.value) == true) {
+        if (!touchAng.value) {
             alert("接触角不存在，请检查圆弧半径/偏心是否正确");
         }
     } else {
