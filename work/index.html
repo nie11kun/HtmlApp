@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FastCaculate</title>
+
+    <link rel="stylesheet" href="https://niekun.net/webcdn/bootstrap-4.4.1-dist/css/bootstrap.min.css">
+
+    <script src="https://niekun.net/webcdn/jquery-3.4.1/jquery.min.js"></script>
+    <script src="https://niekun.net/webcdn//popper.js-1.16.0/popper.min.js"></script>
+    <script src="https://niekun.net/webcdn/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://niekun.net/webcdn/fontawesome-free-5.12.0-web/js/all.min.js"></script>
+
+    <script type="text/javascript" src="script.js"></script>
+
+</head>
+
+<body>
+    <div class="jumbotron text-center bg-dark text-white">
+        <h1>机械参数计算器</h1>
+        <p>集成多个常用的参数便捷计算 -- <a href="https://niekun.net/">Marco Nie</a></p>
+    </div>
+
+    <div class="container input-group p-3 my-3 border">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="typeSelect">计算类型</label>
+        </div>
+        <select class="custom-select" id="typeSelect" onclick="showForm()">
+            <option selected>选择...</option>
+            <option value="1">双圆弧参数</option>
+            <option value="2">螺旋升角</option>
+        </select>
+    </div>
+
+    <div class="container p-3 my-3 border" id="arcCacu">
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">钢球直径</span>
+                </div>
+                <input id="ballDia" type="text" class="form-control" placeholder="请输入钢球直径">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">接触角</span>
+                </div>
+                <input id="touchAng" type="text" class="form-control" placeholder="请输入接触角">
+            </div>
+
+            <hr>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">圆弧半径</span>
+                </div>
+                <input id="arcRadius" type="text" class="form-control" placeholder="请输入圆弧半径">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">水平偏心</span>
+                </div>
+                <input id="horiOffset" type="text" class="form-control" placeholder="请输入水平偏心">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">垂直偏心</span>
+                </div>
+                <input id="verOffset" type="text" class="form-control" placeholder="请输入垂直偏心">
+            </div>
+        </form>
+        <button id="arcCacuBtn" type="button" class="btn btn-primary" onclick="arcCaculate()">计算</button>
+        <button id="arcReCacuBtn" type="button" class="btn btn-secondary" onclick="arcReCaculate()">反算</button>
+    </div>
+
+    <div class="container p-3 my-3 border" id="rotateCacu">
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">螺距</span>
+                </div>
+                <input id="pinch" type="text" class="form-control" placeholder="请输入螺距">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">中径</span>
+                </div>
+                <input id="dia" type="text" class="form-control" placeholder="请输入工件中径">
+            </div>
+
+            <hr>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">螺旋升角</span>
+                </div>
+                <input id="rotateAng" type="text" class="form-control" placeholder="点击计算查看结果">
+            </div>
+        </form>
+        <button id="ratateCacuBtn" type="button" class="btn btn-primary" onclick="rotateAngCaculate()">计算</button>
+    </div>
+
+</body>
+
+</html>
