@@ -1,4 +1,4 @@
-window.onload = function () {
+window.onload = function() {
     var choice = this.document.getElementById('typeSelect');
     choice.options.selectedIndex = 1;
 
@@ -32,7 +32,7 @@ function arcCaculate() {
     var horiOffset = this.document.getElementById('horiOffset');
     var verOffset = this.document.getElementById('verOffset');
 
-    if (ballDia.value > 0 && 0 < touchAng.value < 90) {
+    if (ballDia.value > 0 && touchAng.value > 0 && touchAng.value < 90) {
         arcRadius.value = (1.11 * ballDia.value / 2).toFixed(3);
         horiOffset.value = ((arcRadius.value - ballDia.value / 2) * Math.sin(touchAng.value * Math.PI / 180)).toFixed(3);
         verOffset.value = ((arcRadius.value - ballDia.value / 2) * Math.cos(touchAng.value * Math.PI / 180)).toFixed(3);
@@ -48,7 +48,7 @@ function arcReCaculate() {
     var horiOffset = this.document.getElementById('horiOffset');
     var verOffset = this.document.getElementById('verOffset');
 
-    if (horiOffset.value > 0 && verOffset.value > 0  && arcRadius.value > 0) {
+    if (horiOffset.value > 0 && verOffset.value > 0 && arcRadius.value > 0) {
         ballDia.value = (arcRadius.value / 1.11 * 2).toFixed(3);
         touchAng.value = (Math.asin(horiOffset.value / (arcRadius.value - ballDia.value / 2)) * (180 / Math.PI)).toFixed(3);
 
