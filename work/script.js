@@ -1,8 +1,5 @@
 window.onload = function () {
     var choice = this.document.getElementById('typeSelect');
-    var arcForm = this.document.getElementById('arcCacu');
-    var rotateForm = this.document.getElementById('rotateCacu');
-
     choice.options.selectedIndex = 1;
 
     this.showForm();
