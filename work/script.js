@@ -37,7 +37,7 @@ function arcCaculate() {
         horiOffset.value = ((arcRadius.value - ballDia.value / 2) * Math.sin(touchAng.value * Math.PI / 180)).toFixed(3);
         verOffset.value = ((arcRadius.value - ballDia.value / 2) * Math.cos(touchAng.value * Math.PI / 180)).toFixed(3);
     } else {
-        alert("请检查输入参数是否正确");
+        alert("请检查钢球直径/接触角是否正确");
     }
 }
 
@@ -53,10 +53,10 @@ function arcReCaculate() {
         touchAng.value = (Math.asin(horiOffset.value / (arcRadius.value - ballDia.value / 2)) * (180 / Math.PI)).toFixed(3);
 
         if (isNaN(touchAng.value) == true) {
-            alert("接触角不存在，请检查参数");
+            alert("接触角不存在，请检查圆弧半径/偏心是否正确");
         }
     } else {
-        alert("请检查输入参数是否正确");
+        alert("请检查圆弧半径/偏心是否正确");
     }
 }
 
@@ -68,6 +68,6 @@ function rotateAngCaculate() {
     if (pinch.value > 0 && dia.value > 0) {
         rotateAng.value = (Math.atan(pinch.value / (Math.PI * dia.value)) * (180 / Math.PI)).toFixed(3);
     } else {
-        alert("请检查输入参数是否正确");
+        alert("请检查螺距/中径是否正确");
     }
 }
