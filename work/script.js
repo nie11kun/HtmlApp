@@ -51,6 +51,10 @@ function arcReCaculate() {
     if (horiOffset.value > 0 && verOffset.value > 0  && arcRadius.value > 0) {
         ballDia.value = (arcRadius.value / 1.11 * 2).toFixed(3);
         touchAng.value = (Math.asin(horiOffset.value / (arcRadius.value - ballDia.value / 2)) * (180 / Math.PI)).toFixed(3);
+
+        if (isNaN(touchAng.value) == true) {
+            alert("接触角不存在，请检查参数");
+        }
     } else {
         alert("请检查输入参数是否正确");
     }
