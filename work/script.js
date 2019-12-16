@@ -7,7 +7,7 @@ window.onload = function () {
 
     this.showForm();
 
-}
+};
 
 function showForm() {
     var choice = this.document.getElementById('typeSelect');
