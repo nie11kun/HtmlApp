@@ -52,7 +52,7 @@ function arcReCaculate() {
     var verOffset = this.document.getElementById('verOffset');
 
     if (horiOffset.value > 0 && verOffset.value > 0  && arcRadius.value > 0) {
-        ballDia.value = arcRadius.value /1.11 * 2;
+        ballDia.value = (arcRadius.value /1.11 * 2).toFixed(3);
         touchAng.value = (Math.asin(horiOffset.value / (arcRadius.value - ballDia.value / 2)) * (180 / Math.PI)).toFixed(3);
     } else {
         alert("请检查输入参数是否正确");
