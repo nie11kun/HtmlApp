@@ -10,27 +10,40 @@ function showForm() {
     var choice = this.document.getElementById('typeSelect');
     var arcForm = this.document.getElementById('arcCacu');
     var rotateForm = this.document.getElementById('rotateCacu');
+    var linespeedForm = this.document.getElementById('lineSpeedCacu');
 
-    if (choice.options.selectedIndex == 0) {
-        arcForm.classList.add('d-none');
-        rotateForm.classList.add('d-none');
-    } else {
-        if (choice.options.selectedIndex == 1) {
+    switch (choice.options.selectedIndex) {
+        case 0:
+            arcForm.classList.add('d-none');
+            rotateForm.classList.add('d-none');
+            linespeedForm.classList.add('d-none');
+            break;
+        case 1:
             arcForm.classList.remove('d-none');
             rotateForm.classList.add('d-none');
-        } else {
+            linespeedForm.classList.add('d-none');
+            break;
+        case 2:
             arcForm.classList.add('d-none');
             rotateForm.classList.remove('d-none');
-        }
+            linespeedForm.classList.add('d-none');
+            break;
+        case 3:
+            arcForm.classList.add('d-none');
+            rotateForm.classList.add('d-none');
+            linespeedForm.classList.remove('d-none');
+            break;
+        default:
+            break;
     }
 }
 
 function arcCaculate() {
-    var ballDia = this.document.getElementById('ballDia');
-    var touchAng = this.document.getElementById('touchAng');
-    var arcRadius = this.document.getElementById('arcRadius');
-    var horiOffset = this.document.getElementById('horiOffset');
-    var verOffset = this.document.getElementById('verOffset');
+    var ballDia = this.document.getElementById('ballDiaArc');
+    var touchAng = this.document.getElementById('touchAngArc');
+    var arcRadius = this.document.getElementById('arcRadiusArc');
+    var horiOffset = this.document.getElementById('horiOffsetArc');
+    var verOffset = this.document.getElementById('verOffsetArc');
 
     if (ballDia.value > 0 && touchAng.value > 0 && touchAng.value < 90) {
         arcRadius.value = (1.11 * ballDia.value / 2).toFixed(3);
@@ -42,11 +55,11 @@ function arcCaculate() {
 }
 
 function arcReCaculate() {
-    var ballDia = this.document.getElementById('ballDia');
-    var touchAng = this.document.getElementById('touchAng');
-    var arcRadius = this.document.getElementById('arcRadius');
-    var horiOffset = this.document.getElementById('horiOffset');
-    var verOffset = this.document.getElementById('verOffset');
+    var ballDia = this.document.getElementById('ballDiaArc');
+    var touchAng = this.document.getElementById('touchAngArc');
+    var arcRadius = this.document.getElementById('arcRadiusArc');
+    var horiOffset = this.document.getElementById('horiOffsetArc');
+    var verOffset = this.document.getElementById('verOffsetArc');
 
     if (horiOffset.value > 0 && verOffset.value > 0 && arcRadius.value > 0) {
         ballDia.value = (arcRadius.value / 1.11 * 2).toFixed(3);
@@ -61,13 +74,37 @@ function arcReCaculate() {
 }
 
 function rotateAngCaculate() {
-    var pinch = this.document.getElementById('pinch');
-    var dia = this.document.getElementById('dia');
-    var rotateAng = this.document.getElementById('rotateAng');
+    var pinch = this.document.getElementById('pinchRotateAng');
+    var dia = this.document.getElementById('diaRotateAng');
+    var rotateAng = this.document.getElementById('rotateAngRotateAng');
 
     if (pinch.value > 0 && dia.value > 0) {
         rotateAng.value = (Math.atan(pinch.value / (Math.PI * dia.value)) * (180 / Math.PI)).toFixed(3);
     } else {
         alert("请检查螺距/中径是否正确");
+    }
+}
+
+function lineSpeedCaculate() {
+    var dia = this.document.getElementById('diaLinespeed');
+    var linespeed = this.document.getElementById('linespeedLinespeed');
+    var rotatespeed = this.document.getElementById('rotatespeedLinespeed');
+
+    if (dia.value > 0 && rotatespeed.value > 0) {
+        linespeed.value = (rotatespeed.value / 60 * (dia.value * Math.PI) / 1000).toFixed(3);
+    } else {
+        alert("请输入正确的直径和转速")
+    }
+}
+
+function rotateSpeedCaculate() {
+    var dia = this.document.getElementById('diaLinespeed');
+    var linespeed = this.document.getElementById('linespeedLinespeed');
+    var rotatespeed = this.document.getElementById('rotatespeedLinespeed');
+
+    if (dia.value > 0 && linespeed.value > 0) {
+        rotatespeed.value = (linespeed.value * 1000 / (dia.value * Math.PI) * 60).toFixed(3);
+    } else {
+        alert("请输入正确的直径和线速度")
     }
 }

@@ -56,6 +56,7 @@
             <option selected>选择...</option>
             <option value="1">双圆弧参数</option>
             <option value="2">螺旋升角</option>
+            <option value="2">线速度<->转速</option>
         </select>
     </div>
 
@@ -65,14 +66,14 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">钢球直径</span>
                 </div>
-                <input id="ballDia" type="number" class="form-control" placeholder="请输入钢球直径">
+                <input id="ballDiaArc" type="number" class="form-control" placeholder="请输入钢球直径">
             </div>
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">接触角&nbsp&nbsp&nbsp&nbsp</span>
                 </div>
-                <input id="touchAng" type="number" class="form-control" placeholder="请输入接触角">
+                <input id="touchAngArc" type="number" class="form-control" placeholder="请输入接触角">
             </div>
 
             <hr>
@@ -81,20 +82,20 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">圆弧半径</span>
                 </div>
-                <input id="arcRadius" type="number" class="form-control" placeholder="请输入圆弧半径">
+                <input id="arcRadiusArc" type="number" class="form-control" placeholder="请输入圆弧半径">
             </div>
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">水平偏心</span>
                 </div>
-                <input id="horiOffset" type="number" class="form-control" placeholder="请输入水平偏心">
+                <input id="horiOffsetArc" type="number" class="form-control" placeholder="请输入水平偏心">
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">垂直偏心</span>
                 </div>
-                <input id="verOffset" type="number" class="form-control" placeholder="请输入垂直偏心">
+                <input id="verOffsetArc" type="number" class="form-control" placeholder="请输入垂直偏心">
             </div>
         </form>
         <button id="arcCacuBtn" type="button" class="btn btn-primary" onclick="arcCaculate()">计算</button>
@@ -107,14 +108,14 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">导程</span>
                 </div>
-                <input id="pinch" type="number" class="form-control" placeholder="请输入工件导程">
+                <input id="pinchRotateAng" type="number" class="form-control" placeholder="请输入工件导程">
             </div>
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">中径</span>
                 </div>
-                <input id="dia" type="number" class="form-control" placeholder="请输入工件中径">
+                <input id="diaRotateAng" type="number" class="form-control" placeholder="请输入工件中径">
             </div>
 
             <hr>
@@ -123,10 +124,37 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">螺旋升角</span>
                 </div>
-                <input id="rotateAng" type="number" class="form-control" placeholder="点击计算查看结果" disabled>
+                <input id="rotateAngRotateAng" type="number" class="form-control" placeholder="点击计算查看结果" disabled>
             </div>
         </form>
         <button id="ratateCacuBtn" type="button" class="btn btn-primary" onclick="rotateAngCaculate()">计算</button>
+    </div>
+
+    <div class="container p-3 my-3 border d-none" id="lineSpeedCacu">
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">砂轮直径</span>
+                </div>
+                <input id="diaLinespeed" type="number" class="form-control" placeholder="请输入砂轮直径，单位：毫米">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">线速度</span>
+                </div>
+                <input id="linespeedLinespeed" type="number" class="form-control" placeholder="请输入砂轮线速度，单位：米/秒">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">转速</span>
+                </div>
+                <input id="rotatespeedLinespeed" type="number" class="form-control" placeholder="请输入砂轮转速，单位：转/分钟">
+            </div>
+        </form>
+        <button id="lineSpeedCacuBtn" type="button" class="btn btn-primary" onclick="lineSpeedCaculate()">计算线速度</button>
+        <button id="rotateSpeedCacuBtn" type="button" class="btn btn-secondary" onclick="rotateSpeedCaculate()">计算转速</button>
     </div>
 
     <footer class="footer navbar">
