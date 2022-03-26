@@ -54,7 +54,8 @@
             <option selected>选择...</option>
             <option value="1">双圆弧参数</option>
             <option value="2">螺旋升角</option>
-            <option value="2">线速度<->转速</option>
+            <option value="3">线速度<->转速</option>
+            <option value="4">三线计算终尺寸</option>
         </select>
     </div>
 
@@ -153,6 +154,41 @@
         </form>
         <button id="lineSpeedCacuBtn" type="button" class="btn btn-primary" onclick="lineSpeedCaculate()">计算线速度</button>
         <button id="rotateSpeedCacuBtn" type="button" class="btn btn-secondary" onclick="rotateSpeedCaculate()">计算转速</button>
+    </div>
+
+    <div class="container p-3 my-3 border d-none" id="zhongCacu">
+        <form>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">工件外径</span>
+                </div>
+                <input id="workDia" type="number" class="form-control" placeholder="请输入工件外径">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">三线测量</span>
+                </div>
+                <input id="workSanXian" type="number" class="form-control" placeholder="请输入三线测量值">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">钢球直径</span>
+                </div>
+                <input id="workGangQiuDia" type="number" class="form-control" placeholder="请输入钢球直径">
+            </div>
+
+            <hr>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">终尺寸H</span>
+                </div>
+                <input id="workZhong" type="number" class="form-control" placeholder="点击计算查看结果" disabled>
+            </div>
+        </form>
+        <button id="zhongCacuBtn" type="button" class="btn btn-primary" onclick="zhongCaculate()">计算</button>
     </div>
 
     <footer class="footer navbar">

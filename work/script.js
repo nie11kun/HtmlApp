@@ -11,27 +11,38 @@ function showForm() {
     var arcForm = this.document.getElementById('arcCacu');
     var rotateForm = this.document.getElementById('rotateCacu');
     var linespeedForm = this.document.getElementById('lineSpeedCacu');
+    var zhongForm = this.document.getElementById('zhongCacu');
 
     switch (choice.options.selectedIndex) {
         case 0:
             arcForm.classList.add('d-none');
             rotateForm.classList.add('d-none');
             linespeedForm.classList.add('d-none');
+            zhongForm.classList.add('d-none');
             break;
         case 1:
             arcForm.classList.remove('d-none');
             rotateForm.classList.add('d-none');
             linespeedForm.classList.add('d-none');
+            zhongForm.classList.add('d-none');
             break;
         case 2:
             arcForm.classList.add('d-none');
             rotateForm.classList.remove('d-none');
             linespeedForm.classList.add('d-none');
+            zhongForm.classList.add('d-none');
             break;
         case 3:
             arcForm.classList.add('d-none');
             rotateForm.classList.add('d-none');
             linespeedForm.classList.remove('d-none');
+            zhongForm.classList.add('d-none');
+            break;
+        case 4:
+            arcForm.classList.add('d-none');
+            rotateForm.classList.add('d-none');
+            linespeedForm.classList.add('d-none');
+            zhongForm.classList.remove('d-none');
             break;
         default:
             break;
@@ -106,5 +117,18 @@ function rotateSpeedCaculate() {
         rotatespeed.value = (linespeed.value * 1000 / (dia.value * Math.PI) * 60).toFixed(3);
     } else {
         alert("请输入正确的直径和线速度")
+    }
+}
+
+function zhongCaculate() {
+    var workDia = this.document.getElementById('workDia');
+    var workSanXian = this.document.getElementById('workSanXian');
+    var workGangQiuDia = this.document.getElementById('workGangQiuDia');
+    var workZhong = this.document.getElementById('workZhong');
+
+    if (workDia.value > 0 && workSanXian.value > 0 && workGangQiuDia.value > 0) {
+        workZhong.value = ((workDia.value - workSanXian.value) / 2 + workGangQiuDia.value);
+    } else {
+        alert("请检查参数是否正确");
     }
 }
