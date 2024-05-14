@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AB旋转轴拟合角度计算器</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        .result {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">AB旋转轴拟合角度计算</h1>
+        <div class="row">
+            <div class="col-md-6 form-container">
+                <h2>A B原始 -> A' B'实际</h2>
+                <div class="form-group">
+                    <label for="A">A (度):</label>
+                    <input type="number" class="form-control" id="A" step="any">
+                </div>
+                <div class="form-group">
+                    <label for="B">B (度):</label>
+                    <input type="number" class="form-control" id="B" step="any">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="calculateCD()">计算 A' 和 B'</button>
+                <p id="resultCD" class="result text-center"></p>
+            </div>
+            <div class="col-md-6 form-container">
+                <h2>A' B'实际 -> A B原始</h2>
+                <div class="form-group">
+                    <label for="C">A' (度):</label>
+                    <input type="number" class="form-control" id="C" step="any">
+                </div>
+                <div class="form-group">
+                    <label for="D">B' (度):</label>
+                    <input type="number" class="form-control" id="D" step="any">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="calculateAB()">计算 A 和 B</button>
+                <p id="resultAB" class="result text-center"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function radians(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        function degrees(radians) {
+            return radians * (180 / Math.PI);
+        }
+
+        function computeIntermediates(R, B, A) {
+            const L1 = R * Math.cos(B);
+            const L2 = R * Math.sin(A);
+            const L3 = L1 * Math.sin(A);
+            const L4 = L2 - L3;
+            const L5 = 2 * R * Math.sin(B / 2);
+            const L6 = Math.sqrt(L5 ** 2 - L4 ** 2);
+            const L7 = Math.sqrt(R ** 2 - L2 ** 2);
+            const L8 = Math.sqrt(R ** 2 - L3 ** 2);
+            return [L3, L4, L5, L6, L7, L8];
+        }
+
+        function calculateCD() {
+            const A = radians(parseFloat(document.getElementById('A').value));
+            const B = radians(parseFloat(document.getElementById('B').value));
+            const R = 1;
+
+            const [L3, L4, L5, L6, L7, L8] = computeIntermediates(R, B, A);
+            const C = Math.asin(L3 / R);
+            const D = Math.acos((L7 ** 2 + L8 ** 2 - L6 ** 2) / (2 * L7 * L8));
+
+            document.getElementById('resultCD').textContent = `A' = ${degrees(C).toFixed(2)} 度, B' = ${degrees(D).toFixed(2)} 度`;
+        }
+
+        function solveB(C, D, R, B_guess) {
+            function fsolve(func, guess) {
+                const epsilon = 1e-9; // Tolerance for convergence
+                let x0 = guess;
+                let x1 = guess + 0.1; // Initial step
+                while (Math.abs(func(x1)) > epsilon) {
+                    let y0 = func(x0);
+                    let y1 = func(x1);
+                    let x2 = x1 - y1 * (x1 - x0) / (y1 - y0);
+                    x0 = x1;
+                    x1 = x2;
+                }
+                return x1;
+            }
+
+            function equation(B) {
+                const A = Math.asin(Math.sin(C) / Math.cos(B));
+                const [L3, L4, L5, L6, L7, L8] = computeIntermediates(R, B, A);
+                const cos_D_calculated = (L7 ** 2 + L8 ** 2 - L6 ** 2) / (2 * L7 * L8);
+                return Math.cos(D) - cos_D_calculated;
+            }
+
+            return fsolve(equation, B_guess);
+        }
+
+        function calculateAB() {
+            const C = radians(parseFloat(document.getElementById('C').value));
+            const D = radians(parseFloat(document.getElementById('D').value));
+            const R = 1;
+            const B_guess = radians(30);
+
+            const B_solution = solveB(C, D, R, B_guess);
+            const A_solution = Math.asin(Math.sin(C) / Math.cos(B_solution));
+
+            document.getElementById('resultAB').textContent = `A = ${degrees(A_solution).toFixed(2)} 度, B = ${degrees(B_solution).toFixed(2)} 度`;
+        }
+    </script>
+</body>
+</html>

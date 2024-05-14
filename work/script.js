@@ -44,6 +44,9 @@ function showForm() {
             linespeedForm.classList.add('d-none');
             zhongForm.classList.remove('d-none');
             break;
+        case 5:
+            window.location.href="calcAB.html";
+            break;
         default:
             break;
     }
