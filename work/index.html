@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>机械参数计算器</title>
+    <title>机械计算器</title>
 
-    <link rel="stylesheet" href="https://niekun.net/webcdn/bootstrap-4.4.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
 
-    <script type="text/javascript" src="https://niekun.net/webcdn/jquery-3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://niekun.net/webcdn//popper.js-1.16.0/popper.min.js"></script>
-    <script type="text/javascript" src="https://niekun.net/webcdn/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.16.0/esm/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="script.js?v=1.2"></script>
 
@@ -32,7 +32,7 @@
                     <a class="nav-link" href="https://niekun.net/cloud/">我的云盘</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://niekun.net/HtmlApp/work/">机械参数计算器</a>
+                    <a class="nav-link" href="https://niekun.net/HtmlApp/work/">机械计算器</a>
                 </li>
             </ul>
         </div>
@@ -40,7 +40,7 @@
 
     <div class="container-fluid bg-dark text-white p-3 mb-3">
         <div class="container">
-            <h2>机械参数计算器</h2>
+            <h2>机械计算器</h2>
             <p class="text-secondary">集成常用工件参数的便捷计算，更多资源请访问：
                 <a class="fa fa-fw fa-home"></a> <a href="https://niekun.net/">Marco Nie</a></p>
         </div>
@@ -62,6 +62,14 @@
 
     <div class="container p-3 my-3 border d-none" id="arcCacu">
         <form>
+            <select class="custom-select" id="coeSelect" onchange="changeCoefficient()">
+                <option selected>标准系数选择</option>
+                <option value="1">标准系数: 1.11</option>
+                <option value="2">标准系数: 1.08</option>
+            </select>
+
+            <hr>
+
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">钢球直径</span>
@@ -204,6 +212,6 @@
 
 </body>
 
-<script type="text/javascript" src="https://niekun.net/webcdn/fontawesome-free-5.12.0-web/js/all.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.12.0/css/all.min.css"></script>
 
 </html>

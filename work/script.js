@@ -21,6 +21,8 @@ function showForm() {
             zhongForm.classList.add('d-none');
             break;
         case 1:
+            var coeffiecientChoice = this.document.getElementById('coeSelect');
+            coeffiecientChoice.options.selectedIndex = 1;
             arcForm.classList.remove('d-none');
             rotateForm.classList.add('d-none');
             linespeedForm.classList.add('d-none');
@@ -53,6 +55,14 @@ function showForm() {
 }
 
 function arcCaculate() {
+    var coeffiecientChoice = this.document.getElementById('coeSelect');
+    var coeValue;
+    if (coeffiecientChoice.options.selectedIndex == 1) {
+        coeValue = 1.11;
+    } else {
+        coeValue = 1.08;
+    }
+
     var ballDia = this.document.getElementById('ballDiaArc');
     var touchAng = this.document.getElementById('touchAngArc');
     var arcRadius = this.document.getElementById('arcRadiusArc');
@@ -60,7 +70,7 @@ function arcCaculate() {
     var verOffset = this.document.getElementById('verOffsetArc');
 
     if (ballDia.value > 0 && touchAng.value > 0 && touchAng.value < 90) {
-        arcRadius.value = (1.11 * ballDia.value / 2).toFixed(3);
+        arcRadius.value = (coeValue * ballDia.value / 2).toFixed(3);
         horiOffset.value = ((arcRadius.value - ballDia.value / 2) * Math.sin(touchAng.value * Math.PI / 180)).toFixed(3);
         verOffset.value = ((arcRadius.value - ballDia.value / 2) * Math.cos(touchAng.value * Math.PI / 180)).toFixed(3);
     } else {
@@ -69,6 +79,14 @@ function arcCaculate() {
 }
 
 function arcReCaculate() {
+    var coeffiecientChoice = this.document.getElementById('coeSelect');
+    var coeValue;
+    if (coeffiecientChoice.options.selectedIndex == 1) {
+        coeValue = 1.11;
+    } else {
+        coeValue = 1.08;
+    }
+
     var ballDia = this.document.getElementById('ballDiaArc');
     var touchAng = this.document.getElementById('touchAngArc');
     var arcRadius = this.document.getElementById('arcRadiusArc');
@@ -76,7 +94,7 @@ function arcReCaculate() {
     var verOffset = this.document.getElementById('verOffsetArc');
 
     if (horiOffset.value > 0 && verOffset.value > 0 && arcRadius.value > 0) {
-        ballDia.value = (arcRadius.value / 1.11 * 2).toFixed(3);
+        ballDia.value = (arcRadius.value / coeValue * 2).toFixed(3);
         touchAng.value = (Math.asin(horiOffset.value / (arcRadius.value - ballDia.value / 2)) * (180 / Math.PI)).toFixed(3);
 
         if (!touchAng.value) {
