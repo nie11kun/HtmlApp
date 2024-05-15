@@ -76,11 +76,16 @@
             const B = radians(parseFloat(document.getElementById('B').value));
             const R = 1;
 
+            let tmp1 = 1;
+            if (B < 0) {
+                tmp1 = -1;
+            }
+
             const [L3, L4, L5, L6, L7, L8] = computeIntermediates(R, B, A);
             const C = Math.asin(L3 / R);
-            const D = Math.acos((L7 ** 2 + L8 ** 2 - L6 ** 2) / (2 * L7 * L8));
+            const D = Math.acos((L7 ** 2 + L8 ** 2 - L6 ** 2) / (2 * L7 * L8)) * tmp1;
 
-            document.getElementById('resultCD').textContent = `A' = ${degrees(C).toFixed(2)} 度, B' = ${degrees(D).toFixed(2)} 度`;
+            document.getElementById('resultCD').textContent = `A' = ${degrees(C).toFixed(3)} 度, B' = ${degrees(D).toFixed(3)} 度`;
         }
 
         function solveB(C, D, R, B_guess) {
@@ -114,10 +119,15 @@
             const R = 1;
             const B_guess = radians(30);
 
-            const B_solution = solveB(C, D, R, B_guess);
+            let tmp1 = 1;
+            if (D < 0) {
+                tmp1 = -1;
+            }
+
+            const B_solution = solveB(C, D, R, B_guess) * tmp1;
             const A_solution = Math.asin(Math.sin(C) / Math.cos(B_solution));
 
-            document.getElementById('resultAB').textContent = `A = ${degrees(A_solution).toFixed(2)} 度, B = ${degrees(B_solution).toFixed(2)} 度`;
+            document.getElementById('resultAB').textContent = `A = ${degrees(A_solution).toFixed(3)} 度, B = ${degrees(B_solution).toFixed(3)} 度`;
         }
     </script>
 </body>
