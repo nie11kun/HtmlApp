@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级日志查看器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .control-group {
+            margin-right: 20px;
+        }
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+        .log-table th, .log-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .log-table th {
+            background-color: #f2f2f2;
+        }
+        .log-level-INFO { color: #0066cc; }
+        .log-level-WARNING { color: #ff9900; }
+        .log-level-ERROR { color: #cc0000; }
+        .endpoint { font-weight: bold; }
+        #search-input {
+            width: 200px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>高级日志查看器</h1>
+    <div class="controls">
+        <div class="control-group">
+            <label>选择日志文件：</label>
+            <select id="log-file-select">
+                <option value="/igd.log">igd-app</option>
+                <option value="/cg.log">cg-log</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>日志级别：</label>
+            <select id="log-level-select" multiple>
+                <option value="INFO" selected>INFO</option>
+                <option value="WARNING" selected>WARNING</option>
+                <option value="ERROR" selected>ERROR</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>端点：</label>
+            <select id="endpoint-select" multiple>
+                <option value="/register" selected>/register</option>
+                <option value="/validate_user" selected>/validate_user</option>
+                <option value="/validate_serial" selected>/validate_serial</option>
+                <option value="/generate_registration_code" selected>/generate_registration_code</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>搜索：</label>
+            <input type="text" id="search-input" placeholder="用户名/序列号/位置">
+        </div>
+        <button id="apply-filters">应用过滤器</button>
+        <button id="refresh-logs">刷新日志</button>
+    </div>
+    <div id="log-table-container"></div>
+
+    <script>
+        let allLogs = [];
+
+        function parseLogLine(line) {
+            const match = line.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) - (\w+) - (.+)$/);
+            if (match) {
+                const [_, timestamp, level, message] = match;
+                const entry = { timestamp, level, message };
+
+                // 解析端点
+                const endpointMatch = message.match(/Request to (\/\w+)/);
+                if (endpointMatch) {
+                    entry.endpoint = endpointMatch[1];
+                }
+
+                // 解析用户名、序列号和位置
+                const userMatch = message.match(/username=(\w+)/);
+                const serialMatch = message.match(/serial_number=(\w+)/);
+                const locationMatch = message.match(/IP: .+, (.+)/);
+
+                if (userMatch) entry.username = userMatch[1];
+                if (serialMatch) entry.serialNumber = serialMatch[1];
+                if (locationMatch) entry.location = locationMatch[1];
+
+                return entry;
+            }
+            return null;
+        }
+
+        function fetchAndParseLogs() {
+            const selectedLogFile = document.getElementById('log-file-select').value;
+            fetch(selectedLogFile)
+                .then(response => response.text())
+                .then(data => {
+                    allLogs = data.split('\n')
+                        .map(parseLogLine)
+                        .filter(log => log !== null);
+                    applyFilters();
+                })
+                .catch(error => console.error('获取日志时出错:', error));
+        }
+
+        function applyFilters() {
+            const logLevels = Array.from(document.getElementById('log-level-select').selectedOptions).map(option => option.value);
+            const endpoints = Array.from(document.getElementById('endpoint-select').selectedOptions).map(option => option.value);
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            const filteredLogs = allLogs.filter(log => {
+                return logLevels.includes(log.level) &&
+                    (log.endpoint ? endpoints.includes(log.endpoint) : true) &&
+                    (searchTerm === '' || 
+                     (log.username && log.username.toLowerCase().includes(searchTerm)) ||
+                     (log.serialNumber && log.serialNumber.toLowerCase().includes(searchTerm)) ||
+                     (log.location && log.location.toLowerCase().includes(searchTerm)));
+            });
+
+            displayLogs(filteredLogs);
+        }
+
+        function displayLogs(logs) {
+            const container = document.getElementById('log-table-container');
+            container.innerHTML = '';
+
+            const table = document.createElement('table');
+            table.className = 'log-table';
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>时间戳</th>
+                        <th>级别</th>
+                        <th>端点</th>
+                        <th>用户名</th>
+                        <th>序列号</th>
+                        <th>位置</th>
+                        <th>消息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${logs.map(log => `
+                        <tr>
+                            <td>${log.timestamp}</td>
+                            <td class="log-level-${log.level}">${log.level}</td>
+                            <td>${log.endpoint || ''}</td>
+                            <td>${log.username || ''}</td>
+                            <td>${log.serialNumber || ''}</td>
+                            <td>${log.location || ''}</td>
+                            <td>${log.message}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+            container.appendChild(table);
+        }
+
+        document.getElementById('apply-filters').addEventListener('click', applyFilters);
+        document.getElementById('refresh-logs').addEventListener('click', fetchAndParseLogs);
+        document.getElementById('log-file-select').addEventListener('change', fetchAndParseLogs);
+
+        // 初始加载日志
+        fetchAndParseLogs();
+
+        // 每60秒自动刷新一次
+        setInterval(fetchAndParseLogs, 60000);
+    </script>
+</body>
+</html>
