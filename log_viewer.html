@@ -7,25 +7,40 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
         }
         .controls {
             display: flex;
-            gap: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 20px;
         }
-        .select-container {
-            position: relative;
-            width: 200px;
+        .control-group {
+            display: flex;
+            flex-direction: column;
         }
-        .select-container label {
-            display: block;
+        .control-group label {
             margin-bottom: 5px;
             font-weight: bold;
         }
-        .custom-select {
+        select, input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 200px;
+        }
+        .select-wrapper select {
             appearance: none;
             -webkit-appearance: none;
             width: 100%;
@@ -35,25 +50,62 @@
             background-color: white;
             cursor: pointer;
         }
-        .custom-select:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 2px rgba(76,175,80,0.2);
-        }
-        .select-container::after {
+        .select-wrapper::after {
             content: '\25BC';
             position: absolute;
-            top: 35px;
+            top: 50%;
             right: 10px;
-            color: #888;
+            transform: translateY(-50%);
             pointer-events: none;
         }
-        .custom-select option {
-            padding: 10px;
+        .multi-select-menu {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 100%;
         }
-        .custom-select option:checked {
-            background-color: #e0e0e0;
+        .multi-select-menu label {
+            display: block;
+            padding: 8px 10px;
         }
+        .multi-select-menu label:hover {
+            background-color: #f0f0f0;
+        }
+        .multi-select-menu input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .log-table th, .log-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .log-table th {
+            background-color: #f2f2f2;
+        }
+        .log-level-INFO { color: #0066cc; }
+        .log-level-WARNING { color: #ff9900; }
+        .log-level-ERROR { color: #cc0000; }
     </style>
 </head>
 <body>
@@ -66,22 +118,26 @@
                 <option value="/cg.log">cg.log</option>
             </select>
         </div>
-        <div class="select-container">
-            <label for="log-level-select">日志级别:</label>
-            <select id="log-level-select" class="custom-select" multiple>
-                <option value="INFO">INFO</option>
-                <option value="WARNING">WARNING</option>
-                <option value="ERROR">ERROR</option>
-            </select>
+        <div class="control-group">
+            <label>日志级别：</label>
+            <div class="select-wrapper" id="log-level-wrapper">
+                <select id="log-level-select" multiple>
+                    <option value="INFO" selected>INFO</option>
+                    <option value="WARNING" selected>WARNING</option>
+                    <option value="ERROR" selected>ERROR</option>
+                </select>
+            </div>
         </div>
-        <div class="select-container">
-            <label for="endpoint-select">Endpoint:</label>
-            <select id="endpoint-select" class="custom-select" multiple>
-                <option value="/register">/register</option>
-                <option value="/validate_user">/validate_user</option>
-                <option value="/validate_serial">/validate_serial</option>
-                <option value="/generate_registration_code">/generate_registration_code</option>
-            </select>
+        <div class="control-group">
+            <label>Endpoint：</label>
+            <div class="select-wrapper" id="endpoint-wrapper">
+                <select id="endpoint-select" multiple>
+                    <option value="/register" selected>/register</option>
+                    <option value="/validate_user" selected>/validate_user</option>
+                    <option value="/validate_serial" selected>/validate_serial</option>
+                    <option value="/generate_registration_code" selected>/generate_registration_code</option>
+                </select>
+            </div>
         </div>
         <div class="control-group">
             <label for="ip-filter">IP 地址：</label>
@@ -121,16 +177,15 @@
                 const endpointMatch = message.match(/Request to (\/\w+)/);
                 if (endpointMatch) {
                     entry.endpoint = endpointMatch[1];
-                }
-
-                // 解析注册码
-                const regCodeMatch = message.match(/generated: ([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/);
-                if (regCodeMatch) {
-                    entry.registrationCode = regCodeMatch[1];
+                } else {
+                    const altEndpointMatch = message.match(/Request to (\S+) successful/);
+                    if (altEndpointMatch) {
+                        entry.endpoint = altEndpointMatch[1];
+                    }
                 }
 
                 // 解析 IP 和地理位置
-                const ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+?)$/);
+                let ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+?)(?= -|$)/);
                 if (ipLocationMatch) {
                     entry.ip = ipLocationMatch[1];
                     entry.location = ipLocationMatch[2];
@@ -146,6 +201,12 @@
                 const serialMatch = message.match(/serial_number=([A-Z0-9]+-[0-9]+)/);
                 if (serialMatch) {
                     entry.serialNumber = serialMatch[1];
+                }
+
+                // 解析注册码
+                const regCodeMatch = message.match(/generated: ([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/);
+                if (regCodeMatch) {
+                    entry.registrationCode = regCodeMatch[1];
                 }
 
                 return entry;
@@ -179,6 +240,9 @@
                     endpointSelect.add(option);
                 }
             });
+
+            // 重新创建多选菜单以包含新的选项
+            createMultiSelect('endpoint-wrapper', 'endpoint-select');
         }
 
         function applyFilters() {
@@ -240,9 +304,58 @@
             container.appendChild(table);
         }
 
+        function createMultiSelect(wrapperId, selectId) {
+            const wrapper = document.getElementById(wrapperId);
+            const select = document.getElementById(selectId);
+            const options = Array.from(select.options);
+            
+            // 移除旧的菜单（如果存在）
+            const oldMenu = wrapper.querySelector('.multi-select-menu');
+            if (oldMenu) {
+                oldMenu.remove();
+            }
+            
+            const menu = document.createElement('div');
+            menu.className = 'multi-select-menu';
+            options.forEach(option => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = option.value;
+                checkbox.checked = option.selected;
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(option.text));
+                menu.appendChild(label);
+            });
+            
+            wrapper.appendChild(menu);
+            
+            select.addEventListener('click', (e) => {
+                e.preventDefault();
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    menu.style.display = 'none';
+                }
+            });
+            
+            menu.addEventListener('change', () => {
+                const checked = menu.querySelectorAll('input:checked');
+                Array.from(select.options).forEach(option => {
+                    option.selected = Array.from(checked).some(cb => cb.value === option.value);
+                });
+            });
+        }
+
         document.getElementById('apply-filters').addEventListener('click', applyFilters);
         document.getElementById('refresh-logs').addEventListener('click', fetchAndParseLogs);
         document.getElementById('log-file-select').addEventListener('change', fetchAndParseLogs);
+
+        // 初始化多选菜单
+        createMultiSelect('log-level-wrapper', 'log-level-select');
+        createMultiSelect('endpoint-wrapper', 'endpoint-select');
 
         // 初始加载日志
         fetchAndParseLogs();
