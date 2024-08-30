@@ -99,15 +99,16 @@
                 const endpointMatch = message.match(/Request to (\/\w+)/);
                 if (endpointMatch) {
                     entry.endpoint = endpointMatch[1];
-                } else {
-                    const altEndpointMatch = message.match(/Request to (\S+) successful/);
-                    if (altEndpointMatch) {
-                        entry.endpoint = altEndpointMatch[1];
-                    }
+                }
+
+                // 解析注册码
+                const regCodeMatch = message.match(/generated: ([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/);
+                if (regCodeMatch) {
+                    entry.registrationCode = regCodeMatch[1];
                 }
 
                 // 解析 IP 和地理位置
-                let ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+?)(?= -|$)/);
+                const ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+?)$/);
                 if (ipLocationMatch) {
                     entry.ip = ipLocationMatch[1];
                     entry.location = ipLocationMatch[2];
@@ -123,12 +124,6 @@
                 const serialMatch = message.match(/serial_number=([A-Z0-9]+-[0-9]+)/);
                 if (serialMatch) {
                     entry.serialNumber = serialMatch[1];
-                }
-
-                // 解析注册码
-                const regCodeMatch = message.match(/registration_code=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/);
-                if (regCodeMatch) {
-                    entry.registrationCode = regCodeMatch[1];
                 }
 
                 return entry;
