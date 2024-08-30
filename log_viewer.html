@@ -14,17 +14,17 @@
         }
         h1 {
             color: #333;
+            margin-bottom: 20px;
         }
         .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
         }
         .control-group {
             display: flex;
             flex-direction: column;
-            min-width: 200px;
         }
         .control-group label {
             margin-bottom: 5px;
@@ -40,13 +40,13 @@
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 4px;
-            max-height: 150px;
+            max-height: 120px;
             overflow-y: auto;
             padding: 5px;
         }
         .checkbox-list label {
             display: block;
-            padding: 5px;
+            padding: 3px 5px;
             margin: 0;
             font-weight: normal;
         }
@@ -55,6 +55,12 @@
         }
         .checkbox-list input[type="checkbox"] {
             margin-right: 5px;
+        }
+        .buttons {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
         }
         button {
             padding: 8px 15px;
@@ -68,22 +74,6 @@
         button:hover {
             background-color: #45a049;
         }
-        .log-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        .log-table th, .log-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        .log-table th {
-            background-color: #f2f2f2;
-        }
-        .log-level-INFO { color: #0066cc; }
-        .log-level-WARNING { color: #ff9900; }
-        .log-level-ERROR { color: #cc0000; }
     </style>
 </head>
 <body>
@@ -92,8 +82,8 @@
         <div class="control-group">
             <label for="log-file-select">选择日志文件：</label>
             <select id="log-file-select">
-                <option value="/igd.log">igd.log</option>
                 <option value="/cg.log">cg.log</option>
+                <option value="/igd.log">igd.log</option>
             </select>
         </div>
         <div class="control-group">
@@ -129,10 +119,8 @@
             <label for="serial-filter">Serial Number：</label>
             <input type="text" id="serial-filter" placeholder="输入 Serial Number">
         </div>
-        <div class="control-group">
+        <div class="buttons">
             <button id="apply-filters">应用过滤器</button>
-        </div>
-        <div class="control-group">
             <button id="refresh-logs">刷新日志</button>
         </div>
     </div>
