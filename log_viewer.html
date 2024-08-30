@@ -105,7 +105,6 @@
                 if (endpointMatch) {
                     entry.endpoint = endpointMatch[1];
                 } else {
-                    // 尝试匹配另一种可能的 endpoint 格式
                     const altEndpointMatch = message.match(/Request to (\S+) successful/);
                     if (altEndpointMatch) {
                         entry.endpoint = altEndpointMatch[1];
@@ -125,8 +124,8 @@
                     entry.username = usernameMatch[1];
                 }
 
-                // 解析 serial number
-                const serialMatch = message.match(/serial_number=(\w+)/);
+                // 解析新格式的序列号
+                const serialMatch = message.match(/serial_number=([A-Z0-9]+-[0-9]+)/);
                 if (serialMatch) {
                     entry.serialNumber = serialMatch[1];
                 }
