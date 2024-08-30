@@ -7,18 +7,46 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
+            background-color: #f4f4f4;
         }
         .controls {
-            margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         .control-group {
-            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .control-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        select[multiple] {
+            height: auto;
+            min-height: 100px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #45a049;
         }
         .log-table {
             width: 100%;
@@ -42,14 +70,14 @@
     <h1>高级日志查看器</h1>
     <div class="controls">
         <div class="control-group">
-            <label>选择日志文件：</label>
+            <label for="log-file-select">选择日志文件：</label>
             <select id="log-file-select">
                 <option value="/igd.log">igd.log</option>
                 <option value="/cg.log">cg.log</option>
             </select>
         </div>
         <div class="control-group">
-            <label>日志级别：</label>
+            <label for="log-level-select">日志级别：</label>
             <select id="log-level-select" multiple>
                 <option value="INFO" selected>INFO</option>
                 <option value="WARNING" selected>WARNING</option>
@@ -57,15 +85,7 @@
             </select>
         </div>
         <div class="control-group">
-            <label>IP 地址：</label>
-            <input type="text" id="ip-filter" class="filter-input" placeholder="IP 地址">
-        </div>
-        <div class="control-group">
-            <label>地理位置：</label>
-            <input type="text" id="location-filter" class="filter-input" placeholder="地理位置">
-        </div>
-        <div class="control-group">
-            <label>Endpoint：</label>
+            <label for="endpoint-select">Endpoint：</label>
             <select id="endpoint-select" multiple>
                 <option value="/register" selected>/register</option>
                 <option value="/validate_user" selected>/validate_user</option>
@@ -74,15 +94,27 @@
             </select>
         </div>
         <div class="control-group">
-            <label>用户名：</label>
-            <input type="text" id="username-filter" class="filter-input" placeholder="用户名">
+            <label for="ip-filter">IP 地址：</label>
+            <input type="text" id="ip-filter" placeholder="输入 IP 地址">
         </div>
         <div class="control-group">
-            <label>Serial Number：</label>
-            <input type="text" id="serial-filter" class="filter-input" placeholder="Serial Number">
+            <label for="location-filter">地理位置：</label>
+            <input type="text" id="location-filter" placeholder="输入地理位置">
         </div>
-        <button id="apply-filters">应用过滤器</button>
-        <button id="refresh-logs">刷新日志</button>
+        <div class="control-group">
+            <label for="username-filter">用户名：</label>
+            <input type="text" id="username-filter" placeholder="输入用户名">
+        </div>
+        <div class="control-group">
+            <label for="serial-filter">Serial Number：</label>
+            <input type="text" id="serial-filter" placeholder="输入 Serial Number">
+        </div>
+        <div class="control-group">
+            <button id="apply-filters">应用过滤器</button>
+        </div>
+        <div class="control-group">
+            <button id="refresh-logs">刷新日志</button>
+        </div>
     </div>
     <div id="log-table-container"></div>
 
@@ -139,9 +171,24 @@
                     allLogs = data.split('\n')
                         .map(parseLogLine)
                         .filter(log => log !== null);
+                    updateEndpointOptions();
                     applyFilters();
                 })
                 .catch(error => console.error('获取日志时出错:', error));
+        }
+
+        function updateEndpointOptions() {
+            const endpointSelect = document.getElementById('endpoint-select');
+            const currentEndpoints = new Set(Array.from(endpointSelect.options).map(option => option.value));
+            const newEndpoints = new Set(allLogs.map(log => log.endpoint).filter(endpoint => endpoint));
+
+            newEndpoints.forEach(endpoint => {
+                if (!currentEndpoints.has(endpoint)) {
+                    const option = new Option(endpoint, endpoint);
+                    option.selected = true;
+                    endpointSelect.add(option);
+                }
+            });
         }
 
         function applyFilters() {
@@ -203,7 +250,6 @@
             container.appendChild(table);
         }
 
-        // 其余的事件监听器和初始化代码保持不变
         document.getElementById('apply-filters').addEventListener('click', applyFilters);
         document.getElementById('refresh-logs').addEventListener('click', fetchAndParseLogs);
         document.getElementById('log-file-select').addEventListener('change', fetchAndParseLogs);
