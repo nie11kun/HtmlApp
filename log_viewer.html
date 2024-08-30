@@ -104,24 +104,23 @@
                 const endpointMatch = message.match(/Request to (\/\w+)/);
                 if (endpointMatch) {
                     entry.endpoint = endpointMatch[1];
-                }
-
-                // 解析 IP 和地理位置
-                let ipLocationMatch = message.match(/IP: (.+?), Country: (.+?), City: (.+?)(?:,|$)/);
-                if (ipLocationMatch) {
-                    entry.ip = ipLocationMatch[1];
-                    entry.location = `${ipLocationMatch[2]} ${ipLocationMatch[3]}`;
                 } else {
-                    // 尝试匹配另一种格式
-                    ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+)/);
-                    if (ipLocationMatch) {
-                        entry.ip = ipLocationMatch[1];
-                        entry.location = ipLocationMatch[2];
+                    // 尝试匹配另一种可能的 endpoint 格式
+                    const altEndpointMatch = message.match(/Request to (\S+) successful/);
+                    if (altEndpointMatch) {
+                        entry.endpoint = altEndpointMatch[1];
                     }
                 }
 
-                // 解析用户名
-                const usernameMatch = message.match(/username=(\w+)/);
+                // 解析 IP 和地理位置
+                let ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+?)(?= -|$)/);
+                if (ipLocationMatch) {
+                    entry.ip = ipLocationMatch[1];
+                    entry.location = ipLocationMatch[2];
+                }
+
+                // 解析用户名（包括中文）
+                const usernameMatch = message.match(/username=([\w\u4e00-\u9fa5]+)/);
                 if (usernameMatch) {
                     entry.username = usernameMatch[1];
                 }
