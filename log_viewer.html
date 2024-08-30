@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高级日志查看器</title>
+    <title>日志查看器</title>
     <style>
         :root {
             --primary-color: #3498db;
@@ -147,7 +147,7 @@
     </style>
 </head>
 <body>
-    <h1>高级日志查看器</h1>
+    <h1>日志查看器</h1>
     <div class="controls">
         <div class="control-group">
             <div class="control-item">
@@ -166,7 +166,7 @@
                 </div>
             </div>
             <div class="control-item">
-                <label>Endpoint：</label>
+                <label>访问入口：</label>
                 <div class="checkbox-list" id="endpoint-list">
                     <label><input type="checkbox" value="/register" checked> /register</label>
                     <label><input type="checkbox" value="/validate_user" checked> /validate_user</label>
@@ -189,8 +189,8 @@
                 <input type="text" id="username-filter" placeholder="输入用户名">
             </div>
             <div class="control-item">
-                <label for="serial-filter">Serial Number：</label>
-                <input type="text" id="serial-filter" placeholder="输入 Serial Number">
+                <label for="serial-filter">硬件序列号：</label>
+                <input type="text" id="serial-filter" placeholder="输入硬件序列号">
             </div>
         </div>
         <div class="buttons">
@@ -314,11 +314,11 @@
                     <tr>
                         <th>时间戳</th>
                         <th>级别</th>
-                        <th>Endpoint</th>
+                        <th>访问入口</th>
                         <th>IP</th>
                         <th>地理位置</th>
                         <th>用户名</th>
-                        <th>Serial Number</th>
+                        <th>硬件序列号</th>
                         <th>注册码</th>
                     </tr>
                 </thead>
