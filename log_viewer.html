@@ -46,16 +46,20 @@
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 4px;
-            height: 100px;
+            height: auto;
+            max-height: 150px;
             overflow-y: auto;
             padding: 5px;
-            width: 200px;
+            width: 250px; /* 增加宽度 */
         }
         .checkbox-list label {
             display: block;
             padding: 3px 5px;
             margin: 0;
             font-weight: normal;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .checkbox-list label:hover {
             background-color: #f0f0f0;
