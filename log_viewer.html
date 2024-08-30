@@ -17,16 +17,20 @@
             margin-bottom: 20px;
         }
         .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
             margin-bottom: 20px;
         }
         .control-group {
             display: flex;
+            gap: 15px;
+        }
+        .control-item {
+            display: flex;
             flex-direction: column;
         }
-        .control-group label {
+        .control-item label {
             margin-bottom: 5px;
             font-weight: bold;
         }
@@ -35,14 +39,16 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
+            width: 200px;
         }
         .checkbox-list {
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 4px;
-            max-height: 120px;
+            height: 100px;
             overflow-y: auto;
             padding: 5px;
+            width: 200px;
         }
         .checkbox-list label {
             display: block;
@@ -57,9 +63,7 @@
             margin-right: 5px;
         }
         .buttons {
-            grid-column: 1 / -1;
             display: flex;
-            justify-content: flex-start;
             gap: 10px;
         }
         button {
@@ -80,44 +84,48 @@
     <h1>高级日志查看器</h1>
     <div class="controls">
         <div class="control-group">
-            <label for="log-file-select">选择日志文件：</label>
-            <select id="log-file-select">
-                <option value="/cg.log">cg.log</option>
-                <option value="/igd.log">igd.log</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <label>日志级别：</label>
-            <div class="checkbox-list" id="log-level-list">
-                <label><input type="checkbox" value="INFO" checked> INFO</label>
-                <label><input type="checkbox" value="WARNING" checked> WARNING</label>
-                <label><input type="checkbox" value="ERROR" checked> ERROR</label>
+            <div class="control-item">
+                <label for="log-file-select">选择日志文件：</label>
+                <select id="log-file-select">
+                    <option value="/cg.log">cg.log</option>
+                    <option value="/igd.log">igd.log</option>
+                </select>
+            </div>
+            <div class="control-item">
+                <label>日志级别：</label>
+                <div class="checkbox-list" id="log-level-list">
+                    <label><input type="checkbox" value="INFO" checked> INFO</label>
+                    <label><input type="checkbox" value="WARNING" checked> WARNING</label>
+                    <label><input type="checkbox" value="ERROR" checked> ERROR</label>
+                </div>
+            </div>
+            <div class="control-item">
+                <label>Endpoint：</label>
+                <div class="checkbox-list" id="endpoint-list">
+                    <label><input type="checkbox" value="/register" checked> /register</label>
+                    <label><input type="checkbox" value="/validate_user" checked> /validate_user</label>
+                    <label><input type="checkbox" value="/validate_serial" checked> /validate_serial</label>
+                    <label><input type="checkbox" value="/generate_registration_code" checked> /generate_registration_code</label>
+                </div>
             </div>
         </div>
         <div class="control-group">
-            <label>Endpoint：</label>
-            <div class="checkbox-list" id="endpoint-list">
-                <label><input type="checkbox" value="/register" checked> /register</label>
-                <label><input type="checkbox" value="/validate_user" checked> /validate_user</label>
-                <label><input type="checkbox" value="/validate_serial" checked> /validate_serial</label>
-                <label><input type="checkbox" value="/generate_registration_code" checked> /generate_registration_code</label>
+            <div class="control-item">
+                <label for="ip-filter">IP 地址：</label>
+                <input type="text" id="ip-filter" placeholder="输入 IP 地址">
             </div>
-        </div>
-        <div class="control-group">
-            <label for="ip-filter">IP 地址：</label>
-            <input type="text" id="ip-filter" placeholder="输入 IP 地址">
-        </div>
-        <div class="control-group">
-            <label for="location-filter">地理位置：</label>
-            <input type="text" id="location-filter" placeholder="输入地理位置">
-        </div>
-        <div class="control-group">
-            <label for="username-filter">用户名：</label>
-            <input type="text" id="username-filter" placeholder="输入用户名">
-        </div>
-        <div class="control-group">
-            <label for="serial-filter">Serial Number：</label>
-            <input type="text" id="serial-filter" placeholder="输入 Serial Number">
+            <div class="control-item">
+                <label for="location-filter">地理位置：</label>
+                <input type="text" id="location-filter" placeholder="输入地理位置">
+            </div>
+            <div class="control-item">
+                <label for="username-filter">用户名：</label>
+                <input type="text" id="username-filter" placeholder="输入用户名">
+            </div>
+            <div class="control-item">
+                <label for="serial-filter">Serial Number：</label>
+                <input type="text" id="serial-filter" placeholder="输入 Serial Number">
+            </div>
         </div>
         <div class="buttons">
             <button id="apply-filters">应用过滤器</button>
