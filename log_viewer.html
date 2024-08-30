@@ -37,9 +37,8 @@
         .log-level-INFO { color: #0066cc; }
         .log-level-WARNING { color: #ff9900; }
         .log-level-ERROR { color: #cc0000; }
-        .endpoint { font-weight: bold; }
-        #search-input {
-            width: 200px;
+        .filter-input {
+            width: 150px;
             padding: 5px;
         }
     </style>
@@ -50,8 +49,8 @@
         <div class="control-group">
             <label>选择日志文件：</label>
             <select id="log-file-select">
-                <option value="/igd.log">igd-app</option>
-                <option value="/cg.log">cg-log</option>
+                <option value="/igd.log">igd.log</option>
+                <option value="/cg.log">cg.log</option>
             </select>
         </div>
         <div class="control-group">
@@ -63,7 +62,15 @@
             </select>
         </div>
         <div class="control-group">
-            <label>端点：</label>
+            <label>IP 地址：</label>
+            <input type="text" id="ip-filter" class="filter-input" placeholder="IP 地址">
+        </div>
+        <div class="control-group">
+            <label>地理位置：</label>
+            <input type="text" id="location-filter" class="filter-input" placeholder="地理位置">
+        </div>
+        <div class="control-group">
+            <label>Endpoint：</label>
             <select id="endpoint-select" multiple>
                 <option value="/register" selected>/register</option>
                 <option value="/validate_user" selected>/validate_user</option>
@@ -72,8 +79,12 @@
             </select>
         </div>
         <div class="control-group">
-            <label>搜索：</label>
-            <input type="text" id="search-input" placeholder="用户名/序列号/位置">
+            <label>用户名：</label>
+            <input type="text" id="username-filter" class="filter-input" placeholder="用户名">
+        </div>
+        <div class="control-group">
+            <label>Serial Number：</label>
+            <input type="text" id="serial-filter" class="filter-input" placeholder="Serial Number">
         </div>
         <button id="apply-filters">应用过滤器</button>
         <button id="refresh-logs">刷新日志</button>
@@ -89,20 +100,30 @@
                 const [_, timestamp, level, message] = match;
                 const entry = { timestamp, level, message };
 
-                // 解析端点
+                // 解析 endpoint
                 const endpointMatch = message.match(/Request to (\/\w+)/);
                 if (endpointMatch) {
                     entry.endpoint = endpointMatch[1];
                 }
 
-                // 解析用户名、序列号和位置
-                const userMatch = message.match(/username=(\w+)/);
-                const serialMatch = message.match(/serial_number=(\w+)/);
-                const locationMatch = message.match(/IP: .+, (.+)/);
+                // 解析 IP 和地理位置
+                const ipLocationMatch = message.match(/IP: (.+?), (.+)/);
+                if (ipLocationMatch) {
+                    entry.ip = ipLocationMatch[1];
+                    entry.location = ipLocationMatch[2];
+                }
 
-                if (userMatch) entry.username = userMatch[1];
-                if (serialMatch) entry.serialNumber = serialMatch[1];
-                if (locationMatch) entry.location = locationMatch[1];
+                // 解析用户名
+                const usernameMatch = message.match(/username=(\w+)/);
+                if (usernameMatch) {
+                    entry.username = usernameMatch[1];
+                }
+
+                // 解析 serial number
+                const serialMatch = message.match(/serial_number=(\w+)/);
+                if (serialMatch) {
+                    entry.serialNumber = serialMatch[1];
+                }
 
                 return entry;
             }
@@ -125,15 +146,18 @@
         function applyFilters() {
             const logLevels = Array.from(document.getElementById('log-level-select').selectedOptions).map(option => option.value);
             const endpoints = Array.from(document.getElementById('endpoint-select').selectedOptions).map(option => option.value);
-            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const ipFilter = document.getElementById('ip-filter').value.toLowerCase();
+            const locationFilter = document.getElementById('location-filter').value.toLowerCase();
+            const usernameFilter = document.getElementById('username-filter').value.toLowerCase();
+            const serialFilter = document.getElementById('serial-filter').value.toLowerCase();
 
             const filteredLogs = allLogs.filter(log => {
                 return logLevels.includes(log.level) &&
                     (log.endpoint ? endpoints.includes(log.endpoint) : true) &&
-                    (searchTerm === '' || 
-                     (log.username && log.username.toLowerCase().includes(searchTerm)) ||
-                     (log.serialNumber && log.serialNumber.toLowerCase().includes(searchTerm)) ||
-                     (log.location && log.location.toLowerCase().includes(searchTerm)));
+                    (ipFilter === '' || (log.ip && log.ip.toLowerCase().includes(ipFilter))) &&
+                    (locationFilter === '' || (log.location && log.location.toLowerCase().includes(locationFilter))) &&
+                    (usernameFilter === '' || (log.username && log.username.toLowerCase().includes(usernameFilter))) &&
+                    (serialFilter === '' || (log.serialNumber && log.serialNumber.toLowerCase().includes(serialFilter)));
             });
 
             displayLogs(filteredLogs);
@@ -150,10 +174,11 @@
                     <tr>
                         <th>时间戳</th>
                         <th>级别</th>
-                        <th>端点</th>
+                        <th>Endpoint</th>
+                        <th>IP</th>
+                        <th>地理位置</th>
                         <th>用户名</th>
-                        <th>序列号</th>
-                        <th>位置</th>
+                        <th>Serial Number</th>
                         <th>消息</th>
                     </tr>
                 </thead>
@@ -163,9 +188,10 @@
                             <td>${log.timestamp}</td>
                             <td class="log-level-${log.level}">${log.level}</td>
                             <td>${log.endpoint || ''}</td>
+                            <td>${log.ip || ''}</td>
+                            <td>${log.location || ''}</td>
                             <td>${log.username || ''}</td>
                             <td>${log.serialNumber || ''}</td>
-                            <td>${log.location || ''}</td>
                             <td>${log.message}</td>
                         </tr>
                     `).join('')}
