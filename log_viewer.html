@@ -24,6 +24,7 @@
         }
         .control-group {
             display: flex;
+            flex-wrap: wrap;
             gap: 15px;
         }
         .control-item {
@@ -77,6 +78,40 @@
         }
         button:hover {
             background-color: #45a049;
+        }
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .log-table th, .log-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .log-table th {
+            background-color: #f2f2f2;
+        }
+        .log-level-INFO { color: #0066cc; }
+        .log-level-WARNING { color: #ff9900; }
+        .log-level-ERROR { color: #cc0000; }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+            }
+            .control-group {
+                flex-direction: column;
+            }
+            .control-item, select, input[type="text"], .checkbox-list {
+                width: 100%;
+            }
+            .log-table {
+                font-size: 12px;
+            }
+            .log-table th, .log-table td {
+                padding: 4px;
+            }
         }
     </style>
 </head>
@@ -274,51 +309,6 @@
                 </tbody>
             `;
             container.appendChild(table);
-        }
-
-        function createMultiSelect(wrapperId, selectId) {
-            const wrapper = document.getElementById(wrapperId);
-            const select = document.getElementById(selectId);
-            const options = Array.from(select.options);
-            
-            // 移除旧的菜单（如果存在）
-            const oldMenu = wrapper.querySelector('.multi-select-menu');
-            if (oldMenu) {
-                oldMenu.remove();
-            }
-            
-            const menu = document.createElement('div');
-            menu.className = 'multi-select-menu';
-            options.forEach(option => {
-                const label = document.createElement('label');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = option.value;
-                checkbox.checked = option.selected;
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(option.text));
-                menu.appendChild(label);
-            });
-            
-            wrapper.appendChild(menu);
-            
-            select.addEventListener('click', (e) => {
-                e.preventDefault();
-                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-            });
-            
-            document.addEventListener('click', (e) => {
-                if (!wrapper.contains(e.target)) {
-                    menu.style.display = 'none';
-                }
-            });
-            
-            menu.addEventListener('change', () => {
-                const checked = menu.querySelectorAll('input:checked');
-                Array.from(select.options).forEach(option => {
-                    option.selected = Array.from(checked).some(cb => cb.value === option.value);
-                });
-            });
         }
 
         document.getElementById('apply-filters').addEventListener('click', applyFilters);
