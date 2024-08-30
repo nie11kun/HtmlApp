@@ -144,6 +144,29 @@
                 width: 100%;
             }
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .pagination span {
+            margin: 0 10px;
+            align-self: center;
+        }
     </style>
 </head>
 <body>
@@ -199,9 +222,16 @@
         </div>
     </div>
     <div id="log-table-container"></div>
+    <div class="pagination">
+        <button id="prev-page">上一页</button>
+        <span id="page-info"></span>
+        <button id="next-page">下一页</button>
+    </div>
 
     <script>
         let allLogs = [];
+        let currentPage = 1;
+        const logsPerPage = 100;
 
         function parseLogLine(line) {
             const match = line.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) - (\w+) - (.+)$/);
@@ -298,10 +328,16 @@
                     (serialFilter === '' || (log.serialNumber && log.serialNumber.toLowerCase().includes(serialFilter)));
             });
 
+            currentPage = 1;
             displayLogs(filteredLogs);
         }
 
         function displayLogs(logs) {
+            const totalPages = Math.ceil(logs.length / logsPerPage);
+            const startIndex = (currentPage - 1) * logsPerPage;
+            const endIndex = startIndex + logsPerPage;
+            const logsToDisplay = logs.slice(startIndex, endIndex);
+
             const container = document.getElementById('log-table-container');
             container.innerHTML = '';
 
@@ -321,7 +357,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    ${logs.map(log => `
+                    ${logsToDisplay.map(log => `
                         <tr>
                             <td>${log.timestamp}</td>
                             <td class="log-level-${log.level}">${log.level}</td>
@@ -336,11 +372,34 @@
                 </tbody>
             `;
             container.appendChild(table);
+
+            updatePagination(logs.length, totalPages);
+        }
+
+        function updatePagination(totalLogs, totalPages) {
+            const pageInfo = document.getElementById('page-info');
+            const prevButton = document.getElementById('prev-page');
+            const nextButton = document.getElementById('next-page');
+
+            pageInfo.textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页 (总计 ${totalLogs} 条日志)`;
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+        }
+
+        function changePage(direction) {
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < Math.ceil(allLogs.length / logsPerPage)) {
+                currentPage++;
+            }
+            applyFilters();
         }
 
         document.getElementById('apply-filters').addEventListener('click', applyFilters);
         document.getElementById('refresh-logs').addEventListener('click', fetchAndParseLogs);
         document.getElementById('log-file-select').addEventListener('change', fetchAndParseLogs);
+        document.getElementById('prev-page').addEventListener('click', () => changePage('prev'));
+        document.getElementById('next-page').addEventListener('click', () => changePage('next'));
 
         // 初始加载日志
         fetchAndParseLogs();
