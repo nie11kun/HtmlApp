@@ -23,8 +23,7 @@
         .log-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #fff;
-            margin-bottom: 20px;
+            font-size: 14px;
         }
         .log-table th, .log-table td {
             border: 1px solid #ddd;
@@ -37,10 +36,6 @@
         .log-level-INFO { color: #0066cc; }
         .log-level-WARNING { color: #ff9900; }
         .log-level-ERROR { color: #cc0000; }
-        .filter-input {
-            width: 150px;
-            padding: 5px;
-        }
     </style>
 </head>
 <body>
@@ -124,10 +119,16 @@
                     entry.username = usernameMatch[1];
                 }
 
-                // 解析新格式的序列号
+                // 解析序列号
                 const serialMatch = message.match(/serial_number=([A-Z0-9]+-[0-9]+)/);
                 if (serialMatch) {
                     entry.serialNumber = serialMatch[1];
+                }
+
+                // 解析注册码
+                const regCodeMatch = message.match(/registration_code=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/);
+                if (regCodeMatch) {
+                    entry.registrationCode = regCodeMatch[1];
                 }
 
                 return entry;
@@ -184,6 +185,7 @@
                         <th>地理位置</th>
                         <th>用户名</th>
                         <th>Serial Number</th>
+                        <th>注册码</th>
                         <th>消息</th>
                     </tr>
                 </thead>
@@ -197,6 +199,7 @@
                             <td>${log.location || ''}</td>
                             <td>${log.username || ''}</td>
                             <td>${log.serialNumber || ''}</td>
+                            <td>${log.registrationCode || ''}</td>
                             <td>${log.message}</td>
                         </tr>
                     `).join('')}
