@@ -18,12 +18,13 @@
         .controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             margin-bottom: 20px;
         }
         .control-group {
             display: flex;
             flex-direction: column;
+            min-width: 200px;
         }
         .control-group label {
             margin-bottom: 5px;
@@ -35,47 +36,24 @@
             border-radius: 4px;
             font-size: 14px;
         }
-        .select-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 200px;
-        }
-        .select-wrapper select {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: white;
-            cursor: pointer;
-        }
-        .select-wrapper::after {
-            content: '\25BC';
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-        .multi-select-menu {
-            display: none;
-            position: absolute;
+        .checkbox-list {
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 5px;
         }
-        .multi-select-menu label {
+        .checkbox-list label {
             display: block;
-            padding: 8px 10px;
+            padding: 5px;
+            margin: 0;
+            font-weight: normal;
         }
-        .multi-select-menu label:hover {
+        .checkbox-list label:hover {
             background-color: #f0f0f0;
         }
-        .multi-select-menu input[type="checkbox"] {
+        .checkbox-list input[type="checkbox"] {
             margin-right: 5px;
         }
         button {
@@ -120,23 +98,19 @@
         </div>
         <div class="control-group">
             <label>日志级别：</label>
-            <div class="select-wrapper" id="log-level-wrapper">
-                <select id="log-level-select" multiple>
-                    <option value="INFO" selected>INFO</option>
-                    <option value="WARNING" selected>WARNING</option>
-                    <option value="ERROR" selected>ERROR</option>
-                </select>
+            <div class="checkbox-list" id="log-level-list">
+                <label><input type="checkbox" value="INFO" checked> INFO</label>
+                <label><input type="checkbox" value="WARNING" checked> WARNING</label>
+                <label><input type="checkbox" value="ERROR" checked> ERROR</label>
             </div>
         </div>
         <div class="control-group">
             <label>Endpoint：</label>
-            <div class="select-wrapper" id="endpoint-wrapper">
-                <select id="endpoint-select" multiple>
-                    <option value="/register" selected>/register</option>
-                    <option value="/validate_user" selected>/validate_user</option>
-                    <option value="/validate_serial" selected>/validate_serial</option>
-                    <option value="/generate_registration_code" selected>/generate_registration_code</option>
-                </select>
+            <div class="checkbox-list" id="endpoint-list">
+                <label><input type="checkbox" value="/register" checked> /register</label>
+                <label><input type="checkbox" value="/validate_user" checked> /validate_user</label>
+                <label><input type="checkbox" value="/validate_serial" checked> /validate_serial</label>
+                <label><input type="checkbox" value="/generate_registration_code" checked> /generate_registration_code</label>
             </div>
         </div>
         <div class="control-group">
@@ -229,25 +203,27 @@
         }
 
         function updateEndpointOptions() {
-            const endpointSelect = document.getElementById('endpoint-select');
-            const currentEndpoints = new Set(Array.from(endpointSelect.options).map(option => option.value));
+            const endpointList = document.getElementById('endpoint-list');
+            const currentEndpoints = new Set(Array.from(endpointList.querySelectorAll('input')).map(input => input.value));
             const newEndpoints = new Set(allLogs.map(log => log.endpoint).filter(endpoint => endpoint));
 
             newEndpoints.forEach(endpoint => {
                 if (!currentEndpoints.has(endpoint)) {
-                    const option = new Option(endpoint, endpoint);
-                    option.selected = true;
-                    endpointSelect.add(option);
+                    const label = document.createElement('label');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = endpoint;
+                    checkbox.checked = true;
+                    label.appendChild(checkbox);
+                    label.appendChild(document.createTextNode(endpoint));
+                    endpointList.appendChild(label);
                 }
             });
-
-            // 重新创建多选菜单以包含新的选项
-            createMultiSelect('endpoint-wrapper', 'endpoint-select');
         }
 
         function applyFilters() {
-            const logLevels = Array.from(document.getElementById('log-level-select').selectedOptions).map(option => option.value);
-            const endpoints = Array.from(document.getElementById('endpoint-select').selectedOptions).map(option => option.value);
+            const logLevels = Array.from(document.querySelectorAll('#log-level-list input:checked')).map(input => input.value);
+            const endpoints = Array.from(document.querySelectorAll('#endpoint-list input:checked')).map(input => input.value);
             const ipFilter = document.getElementById('ip-filter').value.toLowerCase();
             const locationFilter = document.getElementById('location-filter').value.toLowerCase();
             const usernameFilter = document.getElementById('username-filter').value.toLowerCase();
@@ -352,10 +328,6 @@
         document.getElementById('apply-filters').addEventListener('click', applyFilters);
         document.getElementById('refresh-logs').addEventListener('click', fetchAndParseLogs);
         document.getElementById('log-file-select').addEventListener('change', fetchAndParseLogs);
-
-        // 初始化多选菜单
-        createMultiSelect('log-level-wrapper', 'log-level-select');
-        createMultiSelect('endpoint-wrapper', 'endpoint-select');
 
         // 初始加载日志
         fetchAndParseLogs();
