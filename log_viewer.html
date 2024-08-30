@@ -107,10 +107,17 @@
                 }
 
                 // 解析 IP 和地理位置
-                const ipLocationMatch = message.match(/IP: (.+?), (.+)/);
+                let ipLocationMatch = message.match(/IP: (.+?), Country: (.+?), City: (.+?)(?:,|$)/);
                 if (ipLocationMatch) {
                     entry.ip = ipLocationMatch[1];
-                    entry.location = ipLocationMatch[2];
+                    entry.location = `${ipLocationMatch[2]} ${ipLocationMatch[3]}`;
+                } else {
+                    // 尝试匹配另一种格式
+                    ipLocationMatch = message.match(/(\d+\.\d+\.\d+\.\d+) (.+)/);
+                    if (ipLocationMatch) {
+                        entry.ip = ipLocationMatch[1];
+                        entry.location = ipLocationMatch[2];
+                    }
                 }
 
                 // 解析用户名
@@ -200,6 +207,7 @@
             container.appendChild(table);
         }
 
+        // 其余的事件监听器和初始化代码保持不变
         document.getElementById('apply-filters').addEventListener('click', applyFilters);
         document.getElementById('refresh-logs').addEventListener('click', fetchAndParseLogs);
         document.getElementById('log-file-select').addEventListener('change', fetchAndParseLogs);
