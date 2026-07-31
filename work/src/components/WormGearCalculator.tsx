@@ -21,10 +21,10 @@ export default function WormGearCalculator() {
 
     const handleCalculate = () => {
         const m = parseFloat(moduleValue);
-        const z = parseFloat(threads);
+        const z = parseInt(threads, 10);
         const d = parseFloat(diameter);
 
-        if (m > 0 && z > 0 && d > 0) {
+        if (m > 0 && z >= 1 && d > 0) {
             const p = m * Math.PI;
             const L = p * z;
             const gamma = Math.atan(L / (Math.PI * d)) * (180 / Math.PI);
@@ -62,11 +62,13 @@ export default function WormGearCalculator() {
                     <div className="calc-group" style={{ marginBottom: '1rem' }}>
                         <label>头数 (z)</label>
                         <input 
-                            type="number" 
+                            type="text" 
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             className="calc-input" 
-                            placeholder="输入头数" 
+                            placeholder="输入正整数头数" 
                             value={threads}
-                            onChange={e => setThreads(e.target.value)}
+                            onChange={e => setThreads(e.target.value.replace(/\D/g, ''))}
                         />
                     </div>
                     
