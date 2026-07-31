@@ -41,7 +41,6 @@ export default function ArcCalculator() {
     const handleReCalculate = () => {
         const coe = parseFloat(coeValue);
         const ho = parseFloat(horiOffset);
-        const vo = parseFloat(verOffset);
         const radius = parseFloat(arcRadius);
 
         if (isNaN(coe) || coe <= 0) {
@@ -49,12 +48,14 @@ export default function ArcCalculator() {
             return;
         }
 
-        if (ho > 0 && vo > 0 && radius > 0) {
+        if (ho > 0 && radius > 0) {
             const bd = (radius / coe * 2);
             const ta = Math.asin(ho / (radius - bd / 2)) * (180 / Math.PI);
+            const calculatedVo = (radius - bd / 2) * Math.cos(ta * Math.PI / 180);
             
             setBallDia(bd.toFixed(4));
             setTouchAng(ta.toFixed(4));
+            setVerOffset(calculatedVo.toFixed(4));
 
             if (isNaN(ta)) {
                 alert("接触角不存在，请检查圆弧半径/偏心是否正确");
@@ -62,7 +63,7 @@ export default function ArcCalculator() {
                 setTimeout(() => scrollToRef(forwardRef), 100);
             }
         } else {
-            alert("请检查圆弧半径/偏心是否正确");
+            alert("请检查圆弧半径/水平偏心是否正确");
         }
     };
 
@@ -74,7 +75,7 @@ export default function ArcCalculator() {
             
             <div className="calc-row" style={{ gap: '2rem' }}>
                 {/* 分组 1: 正向计算 */}
-                <div ref={forwardRef} style={{ flex: 1, background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                <div ref={forwardRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
                     <h3 style={{ fontSize: '1.1rem', color: 'var(--accent)', marginBottom: '1rem', textAlign: 'center' }}>正向计算 (求圆弧参数)</h3>
                     
                     <div className="calc-group" style={{ marginBottom: '1rem' }}>
@@ -127,13 +128,19 @@ export default function ArcCalculator() {
                         />
                     </div>
 
-                    <button className="calc-btn" style={{ width: '100%' }} onClick={handleCalculate}>
+                    <button className="calc-btn" style={{ width: '100%', marginTop: 'auto', flex: 'none' }} onClick={handleCalculate}>
                         计算圆弧参数 <i className="fas fa-arrow-right"></i>
                     </button>
+                    
+                    {/* Hidden spacer to align buttons perfectly on desktop */}
+                    <div style={{ marginTop: '1rem', visibility: 'hidden', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <i className="fas fa-info-circle"></i>
+                        <span>仅需输入圆弧半径和水平偏心即可反算参数</span>
+                    </div>
                 </div>
 
                 {/* 分组 2: 反向推算 */}
-                <div ref={reverseRef} style={{ flex: 1, background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                <div ref={reverseRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
                     <h3 style={{ fontSize: '1.1rem', color: 'var(--accent-secondary)', marginBottom: '1rem', textAlign: 'center' }}>反向推算 (求钢球/接触角)</h3>
                     
                     <div className="calc-group" style={{ marginBottom: '1rem' }}>
@@ -158,7 +165,7 @@ export default function ArcCalculator() {
                         />
                     </div>
                     
-                    <div className="calc-group" style={{ marginBottom: '1.5rem' }}>
+                    <div className="calc-group" style={{ marginBottom: '1rem' }}>
                         <label>垂直偏心 (mm)</label>
                         <input 
                             type="number" 
@@ -168,10 +175,14 @@ export default function ArcCalculator() {
                             onChange={e => setVerOffset(e.target.value)}
                         />
                     </div>
-
-                    <button className="calc-btn" style={{ width: '100%', background: 'var(--accent-secondary)' }} onClick={handleReCalculate}>
+                    <button className="calc-btn" style={{ width: '100%', background: 'var(--accent-secondary)', marginTop: 'auto', flex: 'none' }} onClick={handleReCalculate}>
                         <i className="fas fa-arrow-left"></i> 反算钢球与接触角
                     </button>
+
+                    <div style={{ marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <i className="fas fa-info-circle" style={{ color: 'var(--accent-secondary)' }}></i>
+                        <span>仅需输入圆弧半径和水平偏心即可反算参数</span>
+                    </div>
                 </div>
             </div>
         </div>
