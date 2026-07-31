@@ -44,7 +44,14 @@ export default function MaxOffsetCalculator() {
 
     return (
         <div className="calc-panel large" key="max-offset-calculator">
-            <h2 className="calc-title">砂轮杆最大偏移计算</h2>
+            <h2 className="calc-title" style={{ marginBottom: '1.5rem' }}>砂轮杆最大偏移计算</h2>
+            
+            <div style={{ marginBottom: '2rem', padding: '1rem 1.25rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', borderLeft: '3px solid var(--accent-secondary)', display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                <i className="fas fa-info-circle" style={{ color: 'var(--accent-secondary)', marginTop: '0.2rem' }}></i>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.5 }}>
+                    本模块主要针对<strong>螺母加工</strong>，用于计算砂轮杆相对工件中心所能允许的<strong>最大偏移距离</strong>。如果实际加工偏移超过此最大距离，砂轮杆就会碰到工件小径（发生干涉）。
+                </p>
+            </div>
             
             <div className="calc-row" style={{ gap: '2rem' }}>
                 {/* 分组 1: 输入参数 */}
