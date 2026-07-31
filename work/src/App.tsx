@@ -4,6 +4,7 @@ import SpiralAngleCalculator from './components/SpiralAngleCalculator';
 import SpeedCalculator from './components/SpeedCalculator';
 import ThreeWireCalculator from './components/ThreeWireCalculator';
 import ABRotationCalculator from './components/ABRotationCalculator';
+import WormGearCalculator from './components/WormGearCalculator';
 
 function App() {
     const [calcType, setCalcType] = useState('1');
@@ -65,6 +66,10 @@ function App() {
                         <i className="fas fa-sync-alt"></i>
                         <span>AB旋转轴拟合</span>
                     </div>
+                    <div className={`nav-item ${calcType === '6' ? 'active' : ''}`} onClick={() => setCalcType('6')}>
+                        <i className="fas fa-cogs"></i>
+                        <span>蜗杆加工数据</span>
+                    </div>
                     </nav>
                 </div>
             </aside>
@@ -84,6 +89,9 @@ function App() {
                 </div>
                 <div style={{ display: calcType === '5' ? 'contents' : 'none' }}>
                     <ABRotationCalculator />
+                </div>
+                <div style={{ display: calcType === '6' ? 'contents' : 'none' }}>
+                    <WormGearCalculator />
                 </div>
 
                 <footer className="app-footer">
