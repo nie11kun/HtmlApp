@@ -5,6 +5,7 @@ import SpeedCalculator from './components/SpeedCalculator';
 import ThreeWireCalculator from './components/ThreeWireCalculator';
 import ABRotationCalculator from './components/ABRotationCalculator';
 import WormGearCalculator from './components/WormGearCalculator';
+import MaxOffsetCalculator from './components/MaxOffsetCalculator';
 
 function App() {
     const [calcType, setCalcType] = useState('1');
@@ -70,6 +71,10 @@ function App() {
                         <i className="fas fa-cogs"></i>
                         <span>蜗杆加工数据</span>
                     </div>
+                    <div className={`nav-item ${calcType === '7' ? 'active' : ''}`} onClick={() => setCalcType('7')}>
+                        <i className="fas fa-arrows-alt-h"></i>
+                        <span>砂轮杆最大偏移</span>
+                    </div>
                     </nav>
                 </div>
             </aside>
@@ -92,6 +97,9 @@ function App() {
                 </div>
                 <div style={{ display: calcType === '6' ? 'contents' : 'none' }}>
                     <WormGearCalculator />
+                </div>
+                <div style={{ display: calcType === '7' ? 'contents' : 'none' }}>
+                    <MaxOffsetCalculator />
                 </div>
 
                 <footer className="app-footer">
