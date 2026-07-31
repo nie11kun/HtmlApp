@@ -10,7 +10,7 @@ export default function SpiralAngleCalculator() {
         const d = parseFloat(dia);
 
         if (p > 0 && d > 0) {
-            const result = (Math.atan(p / (Math.PI * d)) * (180 / Math.PI)).toFixed(3);
+            const result = (Math.atan(p / (Math.PI * d)) * (180 / Math.PI)).toFixed(4);
             setRotateAng(result);
         } else {
             alert("请检查螺距/中径是否正确");

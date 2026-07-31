@@ -29,9 +29,9 @@ export default function ArcCalculator() {
             const radius = (coe * bd / 2);
             const ho = (radius - bd / 2) * Math.sin(ta * Math.PI / 180);
             const vo = (radius - bd / 2) * Math.cos(ta * Math.PI / 180);
-            setArcRadius(radius.toFixed(3));
-            setHoriOffset(ho.toFixed(3));
-            setVerOffset(vo.toFixed(3));
+            setArcRadius(radius.toFixed(4));
+            setHoriOffset(ho.toFixed(4));
+            setVerOffset(vo.toFixed(4));
             setTimeout(() => scrollToRef(reverseRef), 100);
         } else {
             alert("请检查钢球直径/接触角是否正确");
@@ -53,8 +53,8 @@ export default function ArcCalculator() {
             const bd = (radius / coe * 2);
             const ta = Math.asin(ho / (radius - bd / 2)) * (180 / Math.PI);
             
-            setBallDia(bd.toFixed(3));
-            setTouchAng(ta.toFixed(3));
+            setBallDia(bd.toFixed(4));
+            setTouchAng(ta.toFixed(4));
 
             if (isNaN(ta)) {
                 alert("接触角不存在，请检查圆弧半径/偏心是否正确");
@@ -66,7 +66,7 @@ export default function ArcCalculator() {
         }
     };
 
-    const PRESET_COES = ['1.11', '1.10', '1.09', '1.08', '1.07', '1.06', '1.05'];
+    const PRESET_COES = ['1.15', '1.14', '1.13', '1.12', '1.11', '1.10', '1.09', '1.08', '1.07', '1.06', '1.05'];
 
     return (
         <div className="calc-panel large" key="arc-calculator">

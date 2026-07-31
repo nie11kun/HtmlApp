@@ -18,7 +18,7 @@ export default function SpeedCalculator() {
         const d = parseFloat(dia);
         const r = parseFloat(rotatespeed);
         if (d > 0 && r > 0) {
-            setLinespeed((r / 60 * (d * Math.PI) / 1000).toFixed(3));
+            setLinespeed((r / 60 * (d * Math.PI) / 1000).toFixed(4));
             setTimeout(() => scrollToRef(group2Ref), 100);
         } else {
             alert("请输入正确的直径和转速");
@@ -29,7 +29,7 @@ export default function SpeedCalculator() {
         const d = parseFloat(dia);
         const l = parseFloat(linespeed);
         if (d > 0 && l > 0) {
-            setRotatespeed((l * 1000 / (d * Math.PI) * 60).toFixed(3));
+            setRotatespeed((l * 1000 / (d * Math.PI) * 60).toFixed(4));
             setTimeout(() => scrollToRef(group1Ref), 100);
         } else {
             alert("请输入正确的直径和线速度");

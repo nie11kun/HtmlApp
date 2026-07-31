@@ -39,7 +39,7 @@ export default function ABRotationCalculator() {
         const C_rad = Math.asin(L3 / R);
         const D_rad = Math.acos((L7 ** 2 + L8 ** 2 - L6 ** 2) / (2 * L7 * L8)) * tmp1;
 
-        setResultCD(`A' = ${degrees(C_rad).toFixed(3)} 度, B' = ${degrees(D_rad).toFixed(3)} 度`);
+        setResultCD(`A' = ${degrees(C_rad).toFixed(4)} 度, B' = ${degrees(D_rad).toFixed(4)} 度`);
     };
 
     const solveB = (C_rad: number, D_rad: number, R: number, B_guess: number) => {
@@ -82,7 +82,7 @@ export default function ABRotationCalculator() {
         const B_solution = solveB(C_rad, D_rad, R, B_guess) * tmp1;
         const A_solution = Math.asin(Math.sin(C_rad) / Math.cos(B_solution));
 
-        setResultAB(`A = ${degrees(A_solution).toFixed(3)} 度, B = ${degrees(B_solution).toFixed(3)} 度`);
+        setResultAB(`A = ${degrees(A_solution).toFixed(4)} 度, B = ${degrees(B_solution).toFixed(4)} 度`);
     };
 
     return (
