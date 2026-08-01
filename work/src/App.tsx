@@ -30,14 +30,14 @@ function App() {
     return (
         <div className="app-container">
             <div className="top-links">
+                <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer">
+                    <i className="fas fa-home"></i> <span className="link-text">首页</span>
+                </a>
                 <a href="https://blog.niekun.net/" target="_blank" rel="noopener noreferrer">
                     <i className="fas fa-blog"></i> <span className="link-text">博客</span>
                 </a>
-                <a href="https://niekun.net/cloud/" target="_blank" rel="noopener noreferrer">
-                    <i className="fas fa-cloud"></i> <span className="link-text">云盘</span>
-                </a>
-                <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer">
-                    <i className="fas fa-home"></i> <span className="link-text">首页</span>
+                <a href="https://blog.niekun.net/start-page.html" target="_blank" rel="noopener noreferrer">
+                    <i className="fas fa-info-circle"></i> <span className="link-text">关于</span>
                 </a>
             </div>
 
