@@ -103,8 +103,20 @@ function App() {
                 </div>
 
                 <footer className="app-footer">
-                    <p>&copy; {new Date().getFullYear()} 聂坤 版权所有</p>
-                    <p>联系邮箱: <a href="mailto:me@niekun.net">me@niekun.net</a></p>
+                    <div className="footer-links">
+                        <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer" className="footer-link">
+                            <i className="fas fa-home"></i> <span>首页</span>
+                        </a>
+                        <a href="https://blog.niekun.net/" target="_blank" rel="noopener noreferrer" className="footer-link">
+                            <i className="fas fa-blog"></i> <span>博客</span>
+                        </a>
+                        <a href="https://blog.niekun.net/start-page.html" target="_blank" rel="noopener noreferrer" className="footer-link">
+                            <i className="fas fa-info-circle"></i> <span>关于</span>
+                        </a>
+                    </div>
+                    <div className="footer-copyright">
+                        <p>&copy; {new Date().getFullYear()} <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer">聂坤</a> 版权所有</p>
+                    </div>
                 </footer>
             </main>
         </div>
