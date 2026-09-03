@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="blueCard5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="purpleCard5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#581c87" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <filter id="shadow5" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arrow5" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="arrowPurple5" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc" />
+    </marker>
+  </defs>
+
+  <rect width="880" height="480" rx="16" fill="url(#bgGrad5)" stroke="#334155" stroke-width="2" />
+
+  <text x="440" y="40" fill="#f8fafc" font-size="20" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle">五轴复合摆头空间旋转轴正反向求解闭环</text>
+  <text x="440" y="64" fill="#94a3b8" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle">机械计算器 • 空间旋转群SO(3)耦合与割线迭代(Secant Method)反解</text>
+
+  <!-- Left: Forward (A,B -> A',B') -->
+  <rect x="50" y="90" width="360" height="350" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow5)" />
+  <rect x="65" y="105" width="220" height="28" rx="6" fill="#1e3a8a" />
+  <text x="75" y="123" fill="#93c5fd" font-size="12" font-weight="bold" font-family="sans-serif">【正向】机床指令 A, B ➔ 实际表观 A', B'</text>
+
+  <rect x="70" y="145" width="320" height="55" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="85" y="166" fill="#94a3b8" font-size="11" font-family="sans-serif">输入物理轴角度:</text>
+  <text x="85" y="186" fill="#38bdf8" font-size="13" font-weight="bold" font-family="monospace">A (机床A轴角度), B (机床B轴角度)</text>
+
+  <path d="M 230 200 L 230 220" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow5)" />
+
+  <rect x="70" y="225" width="320" height="85" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="85" y="246" fill="#94a3b8" font-size="11" font-family="sans-serif">空间多阶几何三角投影计算:</text>
+  <text x="85" y="266" fill="#f1f5f9" font-size="12" font-family="monospace">L3 = R·cos(B)·sin(A), L6 = √(L5² - L4²)</text>
+  <text x="85" y="284" fill="#a5f3fc" font-size="12" font-family="monospace">A' = arcsin(L3 / R), B' = arccos(...)</text>
+  <text x="85" y="300" fill="#94a3b8" font-size="10" font-family="sans-serif">(揭示 B 轴对 A 轴表观角的余弦压缩效应)</text>
+
+  <path d="M 230 310 L 230 330" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow5)" />
+
+  <rect x="70" y="335" width="320" height="85" rx="8" fill="url(#blueCard5)" stroke="#60a5fa" stroke-width="1.5" />
+  <text x="85" y="358" fill="#bfdbfe" font-size="11" font-weight="bold" font-family="sans-serif">输出空间实测检验基准:</text>
+  <text x="85" y="380" fill="#ffffff" font-size="13" font-weight="bold" font-family="sans-serif">实际合成矢量投影角 A' 与 B'</text>
+  <text x="85" y="402" fill="#dbeafe" font-size="11" font-family="sans-serif">用于千分表空间打表、激光跟踪仪空间标定</text>
+
+  <!-- Right: Reverse (A',B' -> A,B) -->
+  <rect x="470" y="90" width="360" height="350" rx="12" fill="#1e293b" stroke="#c084fc" stroke-width="1.5" filter="url(#shadow5)" />
+  <rect x="485" y="105" width="220" height="28" rx="6" fill="#581c87" />
+  <text x="495" y="123" fill="#e9d5ff" font-size="12" font-weight="bold" font-family="sans-serif">【逆向】设计目标 A', B' ➔ 机床指令 A, B</text>
+
+  <rect x="490" y="145" width="320" height="55" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="505" y="166" fill="#94a3b8" font-size="11" font-family="sans-serif">输入零件设计图纸角度:</text>
+  <text x="505" y="186" fill="#c084fc" font-size="13" font-weight="bold" font-family="monospace">目标空间表观角度 A' 与 B'</text>
+
+  <path d="M 650 200 L 650 220" fill="none" stroke="#c084fc" stroke-width="2" marker-end="url(#arrowPurple5)" />
+
+  <rect x="490" y="225" width="320" height="85" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <text x="505" y="246" fill="#c084fc" font-size="11" font-weight="bold" font-family="sans-serif">割线法 (Secant Method) 迭代求解器:</text>
+  <text x="505" y="266" fill="#f1f5f9" font-size="11" font-family="monospace">隐式非线性残差方程: f(B) = cos(D) - cos_D</text>
+  <text x="505" y="284" fill="#f5d0fe" font-size="11" font-family="monospace">x2 = x1 - y1·(x1-x0)/(y1-y0) 递归逼近</text>
+  <text x="505" y="300" fill="#a855f7" font-size="10" font-weight="bold" font-family="sans-serif">收敛容限: 残差小于 1e-9 (十亿分之一极限精度)</text>
+
+  <path d="M 650 310 L 650 330" fill="none" stroke="#c084fc" stroke-width="2" marker-end="url(#arrowPurple5)" />
+
+  <rect x="490" y="335" width="320" height="85" rx="8" fill="url(#purpleCard5)" stroke="#c084fc" stroke-width="1.5" />
+  <text x="505" y="358" fill="#f3e8ff" font-size="11" font-weight="bold" font-family="sans-serif">输出机床物理执行参数:</text>
+  <text x="505" y="380" fill="#ffffff" font-size="13" font-weight="bold" font-family="sans-serif">物理 A 轴与 B 轴真实输入指令 (A, B)</text>
+  <text x="505" y="402" fill="#f3e8ff" font-size="11" font-family="sans-serif">直接写入数控系统宏变量 / 五轴后处理</text>
+</svg>

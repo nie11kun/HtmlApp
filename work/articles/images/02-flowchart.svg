@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="blueCard2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="redCard2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7f1d1d" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <filter id="shadow2" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+  </defs>
+
+  <rect width="880" height="460" rx="16" fill="url(#bgGrad2)" stroke="#334155" stroke-width="2" />
+
+  <text x="440" y="40" fill="#f8fafc" font-size="20" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle">螺纹磨削砂轮架偏角调机与防干涉决策流程</text>
+  <text x="440" y="64" fill="#94a3b8" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle">机械计算器 • 导程与螺旋升角精准对齐</text>
+
+  <!-- Step 1: Input -->
+  <rect x="50" y="95" width="220" height="70" rx="10" fill="url(#blueCard2)" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow2)" />
+  <text x="65" y="120" fill="#bfdbfe" font-size="11" font-weight="bold" font-family="sans-serif">STEP 1 • 图纸头数辨析</text>
+  <text x="65" y="139" fill="#ffffff" font-size="12" font-family="sans-serif">单头: 导程 Ph = 螺距 P</text>
+  <text x="65" y="155" fill="#fde047" font-size="12" font-weight="bold" font-family="sans-serif">多头: 导程 Ph = 头数 n × P</text>
+
+  <path d="M 270 130 L 320 130" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow2)" />
+
+  <!-- Step 2: Pitch Dia -->
+  <rect x="330" y="95" width="220" height="70" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow2)" />
+  <text x="345" y="120" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">STEP 2 • 输入计算器核心参数</text>
+  <text x="345" y="139" fill="#f1f5f9" font-size="12" font-family="sans-serif">输入: 导程 Ph + 中径 d2</text>
+  <text x="345" y="156" fill="#a5f3fc" font-size="12" font-family="monospace">tan(λ) = Ph / (π · d2)</text>
+
+  <path d="M 550 130 L 600 130" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow2)" />
+
+  <!-- Step 3: Result Angle -->
+  <rect x="610" y="95" width="220" height="70" rx="10" fill="url(#blueCard2)" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow2)" />
+  <text x="625" y="120" fill="#bfdbfe" font-size="11" font-weight="bold" font-family="sans-serif">STEP 3 • 精准求得螺旋升角</text>
+  <text x="625" y="141" fill="#ffffff" font-size="14" font-weight="bold" font-family="monospace">λ = arctan(Ph / π d2)</text>
+  <text x="625" y="157" fill="#93c5fd" font-size="11" font-family="sans-serif">精确保留四位小数</text>
+
+  <!-- Down Branch to Decision -->
+  <path d="M 720 165 L 720 220 L 440 220 L 440 245" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow2)" />
+
+  <!-- Decision Node -->
+  <rect x="330" y="250" width="220" height="38" rx="8" fill="#334155" stroke="#f59e0b" stroke-width="2" filter="url(#shadow2)" />
+  <text x="440" y="274" fill="#fef3c7" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">机床砂轮架偏转角校验</text>
+
+  <!-- Three Outcomes -->
+  <path d="M 330 269 L 160 269 L 160 310" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow2)" />
+  <path d="M 440 288 L 440 310" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrow2)" />
+  <path d="M 550 269 L 720 269 L 720 310" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow2)" />
+
+  <!-- Left: Under -->
+  <rect x="50" y="315" width="220" height="95" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" filter="url(#shadow2)" />
+  <text x="65" y="338" fill="#f87171" font-size="12" font-weight="bold" font-family="sans-serif">⚠️ 偏角 小于 螺旋升角</text>
+  <text x="65" y="360" fill="#fca5a5" font-size="11" font-family="sans-serif">砂轮切出位置发生干涉</text>
+  <text x="65" y="380" fill="#cbd5e1" font-size="11" font-family="sans-serif">• 齿侧单面严重中凹过切</text>
+  <text x="65" y="398" fill="#cbd5e1" font-size="11" font-family="sans-serif">• 砂轮侧壁异常急剧磨损</text>
+
+  <!-- Middle: Match Perfect -->
+  <rect x="330" y="315" width="220" height="95" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" filter="url(#shadow2)" />
+  <text x="345" y="338" fill="#6ee7b7" font-size="13" font-weight="bold" font-family="sans-serif">✅ 偏角 严格等于 升角 λ</text>
+  <text x="345" y="360" fill="#a7f3d0" font-size="11" font-family="sans-serif">旋转平面平行于螺旋切线</text>
+  <text x="345" y="380" fill="#ffffff" font-size="11" font-family="sans-serif">• 完美零侧面刮擦干涉</text>
+  <text x="345" y="398" fill="#ffffff" font-size="11" font-family="sans-serif">• 牙形完全对称 Ra &lt; 0.2</text>
+
+  <!-- Right: Over -->
+  <rect x="610" y="315" width="220" height="95" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="1.5" filter="url(#shadow2)" />
+  <text x="625" y="338" fill="#f87171" font-size="12" font-weight="bold" font-family="sans-serif">⚠️ 偏角 大于 螺旋升角</text>
+  <text x="625" y="360" fill="#fca5a5" font-size="11" font-family="sans-serif">砂轮切入端部发生挤压</text>
+  <text x="625" y="380" fill="#cbd5e1" font-size="11" font-family="sans-serif">• 反向齿面被二次啃切</text>
+  <text x="625" y="398" fill="#cbd5e1" font-size="11" font-family="sans-serif">• 摩擦热剧增引起齿面烧伤</text>
+</svg>

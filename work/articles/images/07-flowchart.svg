@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad7" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="blueCard7" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <filter id="shadow7" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arrow7" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="arrowRed7" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444" />
+    </marker>
+    <marker id="arrowGreen7" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <rect width="880" height="460" rx="16" fill="url(#bgGrad7)" stroke="#334155" stroke-width="2" />
+
+  <text x="440" y="40" fill="#f8fafc" font-size="20" font-weight="bold" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle">内螺母磨削砂轮杆防干涉校核与最大偏移决策流程</text>
+  <text x="440" y="64" fill="#94a3b8" font-size="12" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" text-anchor="middle">机械计算器 • 悬伸刚度与内孔微观避让空间极限博弈</text>
+
+  <!-- Step 1 -->
+  <rect x="50" y="90" width="360" height="75" rx="10" fill="url(#blueCard7)" stroke="#60a5fa" stroke-width="1.5" filter="url(#shadow7)" />
+  <text x="65" y="115" fill="#bfdbfe" font-size="11" font-weight="bold" font-family="sans-serif">STEP 1 • 测量与工况设定</text>
+  <text x="65" y="135" fill="#ffffff" font-size="12" font-family="sans-serif">工件长度 L, 工件小径 D_minor</text>
+  <text x="65" y="153" fill="#fde047" font-size="12" font-weight="bold" font-family="sans-serif">砂轮杆直径 d_gan, 安装倾角 β</text>
+
+  <path d="M 410 127 L 460 127" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow7)" />
+
+  <!-- Step 2 -->
+  <rect x="470" y="90" width="360" height="75" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" filter="url(#shadow7)" />
+  <text x="485" y="115" fill="#38bdf8" font-size="11" font-weight="bold" font-family="sans-serif">STEP 2 • 端部倾斜几何扩散</text>
+  <text x="485" y="136" fill="#f1f5f9" font-size="13" font-family="monospace">L1 = L · tan(β · π / 180)</text>
+  <text x="485" y="153" fill="#94a3b8" font-size="11" font-family="sans-serif">计算杆身在工件端部孔壁的最大外凸量</text>
+
+  <!-- Down to Decision -->
+  <path d="M 650 165 L 650 200 L 440 200 L 440 220" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow7)" />
+
+  <!-- Decision Node -->
+  <rect x="270" y="225" width="340" height="44" rx="8" fill="#334155" stroke="#f59e0b" stroke-width="2" filter="url(#shadow7)" />
+  <text x="440" y="252" fill="#fef3c7" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">初始静态干涉安全检查: L1 + d/2 ≥ D/2 ?</text>
+
+  <!-- Two Branches -->
+  <path d="M 270 247 L 160 247 L 160 285" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowRed7)" />
+  <path d="M 610 247 L 720 247 L 720 285" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrowGreen7)" />
+
+  <!-- Left: Crash Danger -->
+  <rect x="50" y="290" width="220" height="145" rx="10" fill="#7f1d1d" stroke="#ef4444" stroke-width="2" filter="url(#shadow7)" />
+  <text x="65" y="315" fill="#fecaca" font-size="13" font-weight="bold" font-family="sans-serif">🚨 致命干涉撞机警报</text>
+  <text x="65" y="338" fill="#ffffff" font-size="11" font-family="sans-serif">尚未进刀对刀即发生硬碰撞!</text>
+  <text x="65" y="362" fill="#fca5a5" font-size="11" font-weight="bold" font-family="sans-serif">【系统自动阻断停机】</text>
+  <text x="65" y="382" fill="#cbd5e1" font-size="11" font-family="sans-serif">对策 1: 换用细一号砂轮杆</text>
+  <text x="65" y="400" fill="#cbd5e1" font-size="11" font-family="sans-serif">对策 2: 减小倾角或缩短悬伸</text>
+  <text x="65" y="418" fill="#cbd5e1" font-size="11" font-family="sans-serif">严禁盲目开机进刀!</text>
+
+  <!-- Right: Safe Calculation -->
+  <rect x="610" y="290" width="220" height="145" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" filter="url(#shadow7)" />
+  <text x="625" y="315" fill="#6ee7b7" font-size="13" font-weight="bold" font-family="sans-serif">✅ 几何安全通过</text>
+  <text x="625" y="338" fill="#ffffff" font-size="11" font-family="sans-serif">计算允许的最大横向走刀量:</text>
+  <text x="625" y="360" fill="#a7f3d0" font-size="12" font-weight="bold" font-family="monospace">Y_max = √(R_safe² - L1²)</text>
+  <text x="625" y="382" fill="#ffffff" font-size="11" font-family="sans-serif">• 将 Y_max 减 0.5mm 写入</text>
+  <text x="625" y="400" fill="#ffffff" font-size="11" font-family="sans-serif">  机床电子软限位保护</text>
+  <text x="625" y="418" fill="#a7f3d0" font-size="11" font-weight="bold" font-family="sans-serif">• 兼顾高刚度与零碰撞安全</text>
+</svg>
