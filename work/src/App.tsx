@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useVisitorStats } from './utils/useVisitorStats';
 import ArcCalculator from './components/ArcCalculator';
 import SpiralAngleCalculator from './components/SpiralAngleCalculator';
 import SpeedCalculator from './components/SpeedCalculator';
@@ -9,6 +10,7 @@ import MaxOffsetCalculator from './components/MaxOffsetCalculator';
 
 function App() {
     const [calcType, setCalcType] = useState('1');
+    const stats = useVisitorStats();
     const navRef = useRef<HTMLElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(true);
@@ -102,7 +104,35 @@ function App() {
                     <MaxOffsetCalculator />
                 </div>
 
-                <footer className="app-footer">
+                                <footer className="app-footer">
+                    {/* 访客统计组件 */}
+                    <div className="footer-stats">
+                        <div className="stats-item">
+                            <span className="stats-dot"></span>
+                            <i className="fas fa-users"></i>
+                            <span className="stats-label">本周访客:</span>
+                            <span className="stats-num">
+                                {stats.loading ? '...' : (stats.weekVisitors !== null ? stats.weekVisitors.toLocaleString() : '--')}
+                            </span>
+                            {stats.weekVisitors !== null && <span className="stats-unit">人</span>}
+                        </div>
+                        <span className="stats-divider">|</span>
+                        <div className="stats-item">
+                            <span className="stats-label">本月访客:</span>
+                            <span className="stats-num">
+                                {stats.loading ? '...' : (stats.monthVisitors !== null ? stats.monthVisitors.toLocaleString() : '--')}
+                            </span>
+                            {stats.monthVisitors !== null && <span className="stats-unit">人</span>}
+                        </div>
+                        <span className="stats-divider">|</span>
+                        <div className="stats-item">
+                            <span className="stats-label">历史总访客:</span>
+                            <span className="stats-num">
+                                {stats.loading ? '...' : (stats.totalVisitors !== null ? stats.totalVisitors.toLocaleString() : '--')}
+                            </span>
+                            {stats.totalVisitors !== null && <span className="stats-unit">人</span>}
+                        </div>
+                    </div>
                     <div className="footer-links">
                         <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer" className="footer-link">
                             <i className="fas fa-home"></i> <span>首页</span>
