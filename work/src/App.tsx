@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useVisitorStats } from './utils/useVisitorStats';
+import { TOOLS, type ToolId } from './tools';
+import Schematic from './components/Schematic';
+import Crosshair from './components/Crosshair';
 import ArcCalculator from './components/ArcCalculator';
 import SpiralAngleCalculator from './components/SpiralAngleCalculator';
 import SpeedCalculator from './components/SpeedCalculator';
@@ -8,8 +11,35 @@ import ABRotationCalculator from './components/ABRotationCalculator';
 import WormGearCalculator from './components/WormGearCalculator';
 import MaxOffsetCalculator from './components/MaxOffsetCalculator';
 
+const PANELS: Record<ToolId, () => React.JSX.Element> = {
+    '1': ArcCalculator,
+    '2': SpiralAngleCalculator,
+    '3': SpeedCalculator,
+    '4': ThreeWireCalculator,
+    '5': ABRotationCalculator,
+    '6': WormGearCalculator,
+    '7': MaxOffsetCalculator,
+};
+
+const LINKS = [
+    { href: 'https://niekun.net/', label: '首页', icon: 'fa-home' },
+    { href: 'https://blog.niekun.net/', label: '博客', icon: 'fa-blog' },
+    { href: 'https://blog.niekun.net/start-page.html', label: '关于', icon: 'fa-info-circle' },
+];
+
+function BrandMark() {
+    return (
+        <svg className="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <circle cx="16" cy="16" r="11.5" fill="none" stroke="currentColor" strokeWidth="1.25" />
+            <circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" strokeWidth="1.25" />
+            <path d="M16 1.5v6M16 24.5v6M1.5 16h6M24.5 16h6" stroke="currentColor" strokeWidth="1.25" />
+            <circle cx="24.1" cy="7.9" r="2.2" fill="var(--accent)" />
+        </svg>
+    );
+}
+
 function App() {
-    const [calcType, setCalcType] = useState('1');
+    const [calcType, setCalcType] = useState<ToolId>('1');
     const stats = useVisitorStats();
     const navRef = useRef<HTMLElement>(null);
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -29,124 +59,102 @@ function App() {
         return () => window.removeEventListener('resize', checkScroll);
     }, []);
 
-    return (
-        <div className="app-container">
-            <div className="top-links">
-                <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer">
-                    <i className="fas fa-home"></i> <span className="link-text">首页</span>
-                </a>
-                <a href="https://blog.niekun.net/" target="_blank" rel="noopener noreferrer">
-                    <i className="fas fa-blog"></i> <span className="link-text">博客</span>
-                </a>
-                <a href="https://blog.niekun.net/start-page.html" target="_blank" rel="noopener noreferrer">
-                    <i className="fas fa-info-circle"></i> <span className="link-text">关于</span>
-                </a>
-            </div>
+    const tool = TOOLS.find(t => t.id === calcType)!;
+    const index = TOOLS.indexOf(tool) + 1;
+    const fmt = (n: number | null) => (stats.loading ? '···' : n !== null ? n.toLocaleString() : '--');
 
-            <aside className="sidebar">
-                <div className="sidebar-header">
-                    <h1>机械计算器</h1>
-                </div>
-                <div className={`sidebar-nav-wrapper ${canScrollLeft ? 'can-scroll-left' : ''} ${canScrollRight ? 'can-scroll-right' : ''}`}>
-                    <nav className="sidebar-nav" ref={navRef} onScroll={checkScroll}>
-                    <div className={`nav-item ${calcType === '1' ? 'active' : ''}`} onClick={() => setCalcType('1')}>
-                        <i className="fas fa-circle-notch"></i>
-                        <span>双圆弧参数</span>
-                    </div>
-                    <div className={`nav-item ${calcType === '2' ? 'active' : ''}`} onClick={() => setCalcType('2')}>
-                        <i className="fas fa-wave-square"></i>
-                        <span>螺旋升角</span>
-                    </div>
-                    <div className={`nav-item ${calcType === '3' ? 'active' : ''}`} onClick={() => setCalcType('3')}>
-                        <i className="fas fa-tachometer-alt"></i>
-                        <span>线速度 ↔ 转速</span>
-                    </div>
-                    <div className={`nav-item ${calcType === '4' ? 'active' : ''}`} onClick={() => setCalcType('4')}>
-                        <i className="fas fa-ruler-combined"></i>
-                        <span>三线计算终尺寸</span>
-                    </div>
-                    <div className={`nav-item ${calcType === '5' ? 'active' : ''}`} onClick={() => setCalcType('5')}>
-                        <i className="fas fa-sync-alt"></i>
-                        <span>AB旋转轴拟合</span>
-                    </div>
-                    <div className={`nav-item ${calcType === '6' ? 'active' : ''}`} onClick={() => setCalcType('6')}>
-                        <i className="fas fa-cogs"></i>
-                        <span>蜗杆加工数据</span>
-                    </div>
-                    <div className={`nav-item ${calcType === '7' ? 'active' : ''}`} onClick={() => setCalcType('7')}>
-                        <i className="fas fa-arrows-alt-h"></i>
-                        <span>砂轮杆最大偏移</span>
-                    </div>
+    const selectTool = (id: ToolId, el: HTMLElement) => {
+        setCalcType(id);
+        if (window.innerWidth <= 900) el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    };
+
+    return (
+        <div className="app">
+            <div className="backdrop" aria-hidden="true" />
+            <div className="grain" aria-hidden="true" />
+            <Crosshair />
+
+            <aside className="rail">
+                <a className="brand" href="./" aria-label="机械计算器 首页">
+                    <BrandMark />
+                    <span className="brand-name">机械计算器</span>
+                    <span className="brand-sub">MECH/CALC</span>
+                </a>
+
+                <p className="rail-intro">七把数字量具，<br />给机床旁的你。</p>
+
+                <div className={`tool-nav-wrap ${canScrollLeft ? 'can-left' : ''} ${canScrollRight ? 'can-right' : ''}`}>
+                    <nav className="tool-nav" ref={navRef} onScroll={checkScroll} aria-label="计算工具">
+                        {TOOLS.map((t, i) => (
+                            <button
+                                key={t.id}
+                                type="button"
+                                className={`tool-link ${calcType === t.id ? 'active' : ''}`}
+                                aria-current={calcType === t.id ? 'page' : undefined}
+                                onClick={e => selectTool(t.id, e.currentTarget)}
+                            >
+                                <span className="tool-index">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="tool-label">{t.nav}</span>
+                            </button>
+                        ))}
                     </nav>
+                </div>
+
+                <div className="rail-meta">
+                    <div className="rail-links">
+                        {LINKS.map(l => (
+                            <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" aria-label={l.label}>
+                                <i className={`fas ${l.icon}`} aria-hidden="true"></i>
+                                <span>{l.label}</span>
+                            </a>
+                        ))}
+                    </div>
+                    <p className="rail-note">纯前端计算 · 数据不出浏览器</p>
                 </div>
             </aside>
 
-            <main className="main-content">
-                <div style={{ display: calcType === '1' ? 'contents' : 'none' }}>
-                    <ArcCalculator />
-                </div>
-                <div style={{ display: calcType === '2' ? 'contents' : 'none' }}>
-                    <SpiralAngleCalculator />
-                </div>
-                <div style={{ display: calcType === '3' ? 'contents' : 'none' }}>
-                    <SpeedCalculator />
-                </div>
-                <div style={{ display: calcType === '4' ? 'contents' : 'none' }}>
-                    <ThreeWireCalculator />
-                </div>
-                <div style={{ display: calcType === '5' ? 'contents' : 'none' }}>
-                    <ABRotationCalculator />
-                </div>
-                <div style={{ display: calcType === '6' ? 'contents' : 'none' }}>
-                    <WormGearCalculator />
-                </div>
-                <div style={{ display: calcType === '7' ? 'contents' : 'none' }}>
-                    <MaxOffsetCalculator />
-                </div>
+            <main className="main">
+                <header className="tool-head" key={calcType}>
+                    <div className="tool-copy">
+                        <p className="eyebrow">
+                            <span>Tool {String(index).padStart(2, '0')} / {String(TOOLS.length).padStart(2, '0')}</span>
+                            <span className="eyebrow-rule" />
+                            <span>{tool.tag}</span>
+                        </p>
+                        <h1 className="tool-title"><span>{tool.title}</span></h1>
+                        <p className="tool-desc">{tool.desc}</p>
+                        <p className="tool-formula"><span className="formula-tag">f</span>{tool.formula}</p>
+                    </div>
+                    <div className="tool-figure">
+                        <Schematic id={calcType} />
+                        <p className="figure-caption">
+                            <span>Fig. {String(index).padStart(2, '0')}</span>
+                            <span>Schematic</span>
+                            <span>NTS</span>
+                        </p>
+                    </div>
+                </header>
 
-                                <footer className="app-footer">
-                    {/* 访客统计组件 */}
-                    <div className="footer-stats">
-                        <div className="stats-item">
-                            <span className="stats-dot"></span>
-                            <i className="fas fa-users"></i>
-                            <span className="stats-label">本周访客:</span>
-                            <span className="stats-num">
-                                {stats.loading ? '...' : (stats.weekVisitors !== null ? stats.weekVisitors.toLocaleString() : '--')}
-                            </span>
-                            {stats.weekVisitors !== null && <span className="stats-unit">人</span>}
-                        </div>
-                        <span className="stats-divider">|</span>
-                        <div className="stats-item">
-                            <span className="stats-label">本月访客:</span>
-                            <span className="stats-num">
-                                {stats.loading ? '...' : (stats.monthVisitors !== null ? stats.monthVisitors.toLocaleString() : '--')}
-                            </span>
-                            {stats.monthVisitors !== null && <span className="stats-unit">人</span>}
-                        </div>
-                        <span className="stats-divider">|</span>
-                        <div className="stats-item">
-                            <span className="stats-label">历史总访客:</span>
-                            <span className="stats-num">
-                                {stats.loading ? '...' : (stats.totalVisitors !== null ? stats.totalVisitors.toLocaleString() : '--')}
-                            </span>
-                            {stats.totalVisitors !== null && <span className="stats-unit">人</span>}
-                        </div>
+                {TOOLS.map(t => {
+                    const Panel = PANELS[t.id];
+                    return (
+                        <section key={t.id} className="panel-slot" hidden={calcType !== t.id} aria-label={t.title}>
+                            <Panel />
+                        </section>
+                    );
+                })}
+
+                <footer className="site-foot">
+                    <div className="foot-stats" aria-label="访客统计">
+                        <span className="live-dot" aria-hidden="true" />
+                        <span className="stat"><span className="stat-label">本周</span><span className="stat-num">{fmt(stats.weekVisitors)}</span></span>
+                        <span className="stat"><span className="stat-label">本月</span><span className="stat-num">{fmt(stats.monthVisitors)}</span></span>
+                        <span className="stat"><span className="stat-label">累计</span><span className="stat-num">{fmt(stats.totalVisitors)}</span></span>
+                        <span className="stat-unit">位访客</span>
                     </div>
-                    <div className="footer-links">
-                        <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer" className="footer-link">
-                            <i className="fas fa-home"></i> <span>首页</span>
-                        </a>
-                        <a href="https://blog.niekun.net/" target="_blank" rel="noopener noreferrer" className="footer-link">
-                            <i className="fas fa-blog"></i> <span>博客</span>
-                        </a>
-                        <a href="https://blog.niekun.net/start-page.html" target="_blank" rel="noopener noreferrer" className="footer-link">
-                            <i className="fas fa-info-circle"></i> <span>关于</span>
-                        </a>
-                    </div>
-                    <div className="footer-copyright">
-                        <p>&copy; {new Date().getFullYear()} <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer">聂坤</a> 版权所有</p>
-                    </div>
+                    <p className="foot-copy">
+                        &copy; {new Date().getFullYear()} <a href="https://niekun.net/" target="_blank" rel="noopener noreferrer">聂坤</a> 版权所有
+                    </p>
                 </footer>
             </main>
         </div>
